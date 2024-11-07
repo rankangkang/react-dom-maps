@@ -8,6 +8,9 @@ dependencies:
   '@googlemaps/js-api-loader':
     specifier: ^1.16.6
     version: 1.16.6
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
 
 devDependencies:
   '@babel/cli':
@@ -37,6 +40,9 @@ devDependencies:
   '@types/google.maps':
     specifier: ^3.55.10
     version: 3.55.10
+  '@types/lodash':
+    specifier: ^4.17.13
+    version: 4.17.13
   '@types/react':
     specifier: ^18.3.3
     version: 18.3.3
@@ -1809,6 +1815,10 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
+  /@types/lodash@4.17.13:
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
+    dev: true
+
   /@types/node@20.14.9:
     resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
     dependencies:
@@ -3027,6 +3037,7 @@ packages:
   /fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dependencies:
       to-regex-range: 5.0.1
     dev: true
@@ -3467,6 +3478,7 @@ packages:
   /is-number@7.0.0:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
     engines: {node: '>=0.12.0'}
+    requiresBuild: true
     dev: true
 
   /is-obj@2.0.0:
@@ -3718,6 +3730,10 @@ packages:
   /lodash.upperfirst@4.3.1:
     resolution: {integrity: sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==}
     dev: true
+
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /log-update@6.0.0:
     resolution: {integrity: sha512-niTvB4gqvtof056rRIrTZvjNYE4rCUzO6X/X+kYjd7WFxXeJ0NwEFnRxX6ehkvv3jTwrXnNdtAak5XYZuIyPFw==}
@@ -4474,6 +4490,7 @@ packages:
   /to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
+    requiresBuild: true
     dependencies:
       is-number: 7.0.0
     dev: true

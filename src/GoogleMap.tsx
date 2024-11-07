@@ -1,49 +1,39 @@
-import React, { useImperativeHandle, useRef } from "react";
+import React, { memo, RefObject } from "react";
 
+import { cn } from "./utils/dom";
 import { GoogleMapApi } from "./GoogleMap.types";
-import { cn } from "./GoogleMap.utils";
-import { MapContextProvider } from "./GoogleMap.context";
+import { GoogleMapContextProvider } from "./GoogleMap.context";
 
 export interface GoogleMapProps {
-  api: GoogleMapApi;
-  children?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
+  api: GoogleMapApi;
+  containerRef: RefObject<HTMLDivElement>;
+  children?: React.ReactNode;
   classNames?: {
-    wrapper?: string;
     map?: string;
     children?: string;
   };
-  style?: React.CSSProperties;
 }
 
-export type ElementType = HTMLDivElement;
+/** use with useGoogleMap */
+export const GoogleMap = memo<GoogleMapProps>((props) => {
+  const { api, containerRef, className, style, classNames } = props;
 
-export const GoogleMap = React.forwardRef<ElementType, GoogleMapProps>(
-  (props, ref) => {
-    const { api, children, className, classNames = {}, style } = props;
-    const elRef = useRef<HTMLDivElement>(null);
-
-    useImperativeHandle(ref, () => elRef.current!);
-
-    const {
-      wrapper: wrapperClassName,
-      map: mapClassName,
-      children: childrenClassName,
-    } = classNames;
-    return (
+  return (
+    <div
+      className={cn("moe-relative moe-h-[calc(100%+32px)]", className)}
+      style={style}
+    >
       <div
-        className={cn("google-map-wrapper", className, wrapperClassName)}
-        style={style}
-      >
-        <div className={cn("google-map", mapClassName)} ref={elRef} />
-        {api && (
-          <MapContextProvider {...api}>
-            <div className={cn("google-map-children", childrenClassName)}>
-              {children}
-            </div>
-          </MapContextProvider>
-        )}
-      </div>
-    );
-  },
-);
+        className={cn("moe-h-full", classNames?.map)}
+        ref={containerRef}
+      ></div>
+      {api && (
+        <GoogleMapContextProvider map={api.map} maps={api.maps}>
+          <div className={cn(classNames?.children)}>{props.children}</div>
+        </GoogleMapContextProvider>
+      )}
+    </div>
+  );
+});

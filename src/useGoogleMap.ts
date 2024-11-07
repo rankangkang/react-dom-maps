@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { load } from "./GoogleMap.loader";
+import { load } from "./utils/loader";
 import { GoogleMapApi } from "./GoogleMap.types";
 
 export function useGoogleMap(
@@ -12,7 +12,7 @@ export function useGoogleMap(
 
   useEffect(() => {
     if (!apiKey) {
-      return console.error("Invalid apiKey");
+      throw new Error("apiKey is required");
     }
 
     load({ apiKey }).then((google) => {

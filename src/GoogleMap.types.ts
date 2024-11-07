@@ -5,16 +5,12 @@ export interface GoogleMapApi {
   maps: typeof google.maps;
 }
 
-export type LatLng = google.maps.LatLng | google.maps.LatLngLiteral;
+export type LatLng = google.maps.LatLngLiteral;
 
+/**
+ * paneType z-index sequence: floatPane > overlayMouseTarget > markerLayer > overlayLayer > mapPane
+ */
 export type PaneType = keyof NonNullable<google.maps.MapPanes>;
-
-// 叠加层类型
-export enum OverlayType {
-  MARKER = "marker",
-  OVERLAY_VIEW = "overlayView",
-  // TODO: 后续可扩展 polyline、polygon、circle 等组件
-}
 
 export type Draggable<T = any> = {
   draggable?: boolean;
@@ -23,12 +19,7 @@ export type Draggable<T = any> = {
   onDragEnd?(e: MouseEvent, params: T): void;
 };
 
-export type WithOverlayType<T> = T & {
-  overlayType?: OverlayType;
-};
-
-export type OverlayComponentType<Props, Ref = undefined> = Ref extends undefined
-  ? WithOverlayType<React.ComponentType<Props>>
-  : WithOverlayType<
-      React.ForwardRefExoticComponent<Props & React.RefAttributes<Ref>>
-    >;
+/** overlay component type */
+export type OCType<Props, Ref = undefined> = Ref extends undefined
+  ? React.ComponentType<Props>
+  : React.ForwardRefExoticComponent<Props & React.RefAttributes<Ref>>;

@@ -1,30 +1,28 @@
-import React, { useContext } from "react";
+import React, { PropsWithChildren, useContext, createContext } from "react";
 
-export interface MapContextState {
+export interface GoogleMapContextState {
+  /** map instance */
   map?: google.maps.Map;
+  /** google.maps object */
   maps?: typeof google.maps;
 }
 
-export const MapContext = React.createContext<MapContextState>({
+export const GoogleMapContext = createContext<GoogleMapContextState>({
   map: undefined,
   maps: undefined,
 });
 
-export const MapContextProvider: React.FC<{
-  map: google.maps.Map;
-  maps: typeof google.maps;
-  children?: React.ReactNode;
-}> = (props) => {
-  const { map, maps, children } = props;
+export const GoogleMapContextProvider: React.FC<
+  PropsWithChildren<GoogleMapContextState>
+> = (props) => {
   return (
-    <MapContext.Provider value={{ map, maps }}>{children}</MapContext.Provider>
+    <GoogleMapContext.Provider value={{ map: props.map, maps: props.maps }}>
+      {props.children}
+    </GoogleMapContext.Provider>
   );
 };
 
-export function useMapContext() {
-  const { map, maps } = useContext(MapContext);
-  return {
-    map: map!,
-    maps: maps!,
-  };
+export function useGoogleMapContext() {
+  const { map, maps } = useContext(GoogleMapContext);
+  return { map, maps: maps! };
 }

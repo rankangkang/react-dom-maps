@@ -1,3 +1,5 @@
+import { PaneType } from "../GoogleMap.types";
+
 type ClassValue = string | undefined | null | boolean | { [key: string]: any };
 
 /**
@@ -28,10 +30,6 @@ export function cn(...args: ClassValue[]): string {
   return classes.join(" ");
 }
 
-export const noop = () => {
-  // @ts-nocheck
-};
-
 export const getLatLngLiteral = (
   location: google.maps.LatLng | google.maps.LatLngLiteral,
 ) => {
@@ -42,3 +40,18 @@ export const getLatLngLiteral = (
     lng: Number(typeof lng === "function" ? lng() : lng),
   };
 };
+
+export function createContainerDiv(
+  options: { pane?: PaneType; className?: string } = {},
+) {
+  const { pane, className } = options;
+  const div = document.createElement("div");
+  div.style.position = "absolute";
+  if (className) {
+    div.classList.add(className);
+  }
+  if (pane) {
+    div.classList.add(pane);
+  }
+  return div;
+}
