@@ -7,7 +7,7 @@ import { GoogleMapContextProvider } from "./GoogleMap.context";
 export interface GoogleMapProps {
   className?: string;
   style?: React.CSSProperties;
-  api: GoogleMapApi;
+  api?: GoogleMapApi;
   containerRef: RefObject<HTMLDivElement>;
   children?: React.ReactNode;
   classNames?: {
@@ -21,14 +21,8 @@ export const GoogleMap = memo<GoogleMapProps>((props) => {
   const { api, containerRef, className, style, classNames } = props;
 
   return (
-    <div
-      className={cn("moe-relative moe-h-[calc(100%+32px)]", className)}
-      style={style}
-    >
-      <div
-        className={cn("moe-h-full", classNames?.map)}
-        ref={containerRef}
-      ></div>
+    <div className={cn(className)} style={style}>
+      <div className={cn(classNames?.map)} ref={containerRef} />
       {api && (
         <GoogleMapContextProvider map={api.map} maps={api.maps}>
           <div className={cn(classNames?.children)}>{props.children}</div>
