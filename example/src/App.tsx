@@ -4,7 +4,7 @@ import "./App.css";
 
 function App() {
   const { api, ref } = useGoogleMap({
-    apiKey: "AIzaSyBas7qaE8DCC9lPtDlTrozayroywgpJlls",
+    apiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
   });
 
   return (
