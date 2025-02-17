@@ -2,7 +2,7 @@ import { isFunction } from "lodash";
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { useGoogleMapContext } from "../GoogleMap.context";
+import { useGoogleMapContext } from "../../context";
 
 export interface ControlProps {
   id: string;

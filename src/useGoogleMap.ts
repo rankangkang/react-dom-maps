@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { load } from "./utils/loader";
-import { GoogleMapApi } from "./GoogleMap.types";
+import { GoogleMapApi } from "./types";
 
 export function useGoogleMap(
   options: google.maps.MapOptions & { apiKey?: string } = {},

@@ -1,9 +1,9 @@
 import React, { useEffect, useImperativeHandle, useRef } from "react";
 import ReactDOM from "react-dom";
 
-import { useGoogleMapContext } from "../GoogleMap.context";
-import { LatLng, OCType, PaneType } from "../GoogleMap.types";
-import { createContainerDiv } from "../utils/dom";
+import { useGoogleMapContext } from "../../context";
+import { LatLng, OCType, PaneType } from "../../types";
+import { createContainerDiv } from "../../utils/dom";
 
 import { createOverlayView } from "./createOverlayView";
 

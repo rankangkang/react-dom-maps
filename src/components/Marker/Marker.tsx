@@ -1,13 +1,13 @@
 import { isNumber, omit } from "lodash";
 import React, { FC, PropsWithChildren, memo, useMemo } from "react";
 
-import { OCType } from "../GoogleMap.types";
+import { OCType } from "../../types";
 
 import {
   MarkerDraggable,
   MarkerOrigin,
   MarkerOriginOffset,
-} from "./Marker.types";
+} from "./types";
 import { MarkerOverlay } from "./MarkerOverlay";
 
 export interface MarkerProps extends MarkerDraggable {
