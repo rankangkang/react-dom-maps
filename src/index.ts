@@ -1,7 +1,7 @@
 export * from "./GoogleMap";
 export * from "./useGoogleMap";
 
-export * from "./Control";
-export * from "./Marker";
-export * from "./Overlay";
-export * from "./Polyline";
+export * from "./components/Control";
+export * from "./components/Marker";
+export * from "./components/Overlay";
+export * from "./components/Polyline";

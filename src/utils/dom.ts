@@ -1,4 +1,4 @@
-import { PaneType } from "../GoogleMap.types";
+import { PaneType } from "../types";
 
 type ClassValue = string | undefined | null | boolean | { [key: string]: any };
 

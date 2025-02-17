@@ -1,4 +1,4 @@
-import { LatLng, PaneType } from "../GoogleMap.types";
+import { LatLng, PaneType } from "../../types";
 
 /**
  * create OverlayView factory class

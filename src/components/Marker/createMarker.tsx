@@ -1,7 +1,7 @@
 import { omit } from "lodash";
 import React from "react";
 
-import { OCType } from "../GoogleMap.types";
+import { OCType } from "../../types";
 
 import { Marker, MarkerProps } from "./Marker";
 
@@ -9,7 +9,7 @@ import { Marker, MarkerProps } from "./Marker";
  * create marker that can render on google map
  * @param WrappedMarker
  */
-export function createMapMarker<M extends MarkerProps, T>(
+export function createMarker<M extends MarkerProps, T extends {}>(
   WrappedMarker: React.ComponentType<T>,
 ) {
   const NextMarker: OCType<M & T> = (props) => {

@@ -1,4 +1,4 @@
-import { Draggable, LatLng } from "../GoogleMap.types";
+import { Draggable, LatLng } from "../../types";
 
 export type MarkerDraggable = Draggable<{ latlng: LatLng }>;
 

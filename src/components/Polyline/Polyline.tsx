@@ -1,7 +1,7 @@
 import { noop } from "lodash";
 import { FC, memo, useEffect, useState } from "react";
 
-import { useGoogleMapContext } from "../GoogleMap.context";
+import { useGoogleMapContext } from "../../context";
 
 const defaultOptions = {};
 

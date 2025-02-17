@@ -1,8 +1,8 @@
 import React, { memo, RefObject } from "react";
 
 import { cn } from "./utils/dom";
-import { GoogleMapApi } from "./GoogleMap.types";
-import { GoogleMapContextProvider } from "./GoogleMap.context";
+import { GoogleMapApi } from "./types";
+import { GoogleMapContextProvider } from "./context";
 
 export interface GoogleMapProps {
   className?: string;
@@ -22,12 +22,16 @@ export const GoogleMap = memo<GoogleMapProps>((props) => {
 
   return (
     <div className={cn(className)} style={style}>
-      <div className={cn(classNames?.map)} ref={containerRef} />
-      {api && (
+      <div
+        style={{ height: "100%" }}
+        className={cn(classNames?.map)}
+        ref={containerRef}
+      />
+      {!!api ? (
         <GoogleMapContextProvider map={api.map} maps={api.maps}>
           <div className={cn(classNames?.children)}>{props.children}</div>
         </GoogleMapContextProvider>
-      )}
+      ) : null}
     </div>
   );
 });

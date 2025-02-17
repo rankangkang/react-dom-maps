@@ -1,18 +1,33 @@
-import { useGoogleMap, GoogleMap } from "../../src";
+import { useGoogleMap, GoogleMap, createMarker } from "../../src";
 
 import "./App.css";
+
+const Marker = createMarker(() => {
+  return (
+    <div className="w-[20px] h-[20px] bg-red-500 rounded-full border-white border" />
+  );
+});
+
+const LAT_LNG_HK = {
+  lat: 22.3193,
+  lng: 114.1694,
+};
 
 function App() {
   const { api, ref } = useGoogleMap({
     apiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
+    mapTypeId: "roadmap",
+    center: LAT_LNG_HK,
   });
 
   return (
     <GoogleMap
-      className="h-[300px] w-[300px]"
+      className="w-full h-[600px] relative"
       api={api}
       containerRef={ref}
-    ></GoogleMap>
+    >
+      <Marker {...LAT_LNG_HK} origin="bottomCenter" />
+    </GoogleMap>
   );
 }
 

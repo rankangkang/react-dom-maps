@@ -2,16 +2,12 @@ import { PropsWithChildren, useEffect, useMemo, useRef, FC } from "react";
 import { createPortal } from "react-dom";
 import { noop } from "lodash";
 
-import { useGoogleMapContext } from "../GoogleMap.context";
-import { Draggable, LatLng, PaneType } from "../GoogleMap.types";
+import { useGoogleMapContext } from "../../context";
+import { Draggable, LatLng, PaneType } from "../../types";
 import { createOverlayView } from "../Overlay/createOverlayView";
-import { createContainerDiv, getLatLngLiteral } from "../utils/dom";
+import { createContainerDiv, getLatLngLiteral } from "../../utils/dom";
 
-import {
-  MarkerDraggable,
-  MarkerOrigin,
-  MarkerOriginOffset,
-} from "./Marker.types";
+import { MarkerDraggable, MarkerOrigin, MarkerOriginOffset } from "./types";
 
 export interface MarkerOverlayProps extends MarkerDraggable {
   pane?: PaneType;
