@@ -1,15 +1,20 @@
 {
-  "name": "react-google-map",
+  "name": "@cmkk/react-google-map",
   "version": "1.0.0",
   "description": "",
   "exports": {
-    "import": "./lib/index.js",
-    "types": "./types/index.d.ts"
+    "import": "./dist/index.es.js",
+    "types": "./dist/index.d.ts"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "prepare": "husky && husky install",
-    "build": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
-    "build:types": "tsc"
+    "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
+    "build:types": "tsc",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +40,9 @@
     "prettier": "^3.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vite": "^6.1.0",
+    "vite-plugin-dts": "^4.5.0"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",

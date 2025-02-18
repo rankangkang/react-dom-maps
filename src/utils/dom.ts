@@ -31,7 +31,7 @@ export function cn(...args: ClassValue[]): string {
 }
 
 export const getLatLngLiteral = (
-  location: google.maps.LatLng | google.maps.LatLngLiteral,
+  location?: google.maps.LatLng | google.maps.LatLngLiteral | null,
 ) => {
   const lat = location?.lat || undefined;
   const lng = location?.lng || undefined;

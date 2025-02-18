@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "ESNext",
     "lib": ["dom", "es2016"],
     "allowJs": true,
     "checkJs": false,
@@ -9,9 +9,8 @@
     "sourceMap": true, // 生成 .map 文件
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "./types",
     "rootDir": "./src",
-    // "strict": true,
+    "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true, // 允许对 ES 模块默认导出的 import
     "skipLibCheck": true, // 跳过类型声明文件的检查

@@ -200,7 +200,7 @@ function MarkerOverlayFactory(maps: typeof google.maps = google.maps) {
         const nextPixel = new maps.Point(currPxPos.x - dx, currPxPos.y - dy);
         const nextPosition =
           this.getProjection()?.fromDivPixelToLatLng(nextPixel);
-        // euqals to `this.position = nextPosition`
+        // equals to `this.position = nextPosition`
         this.set("position", nextPosition);
         this.prevPxPos = { x: e.clientX, y: e.clientY };
         this.draw();
