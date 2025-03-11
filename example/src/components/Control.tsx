@@ -1,16 +1,17 @@
-import { Control } from "../../../src";
-import { BackCenter, RouteLine, ZoomIn, ZoomOut } from "./Icon";
+import { Control } from '../../../src'
+
+import { BackCenter, RouteLine, ZoomIn, ZoomOut } from './Icon'
 
 export const BottomCenterControl = (props: {
-  onZoomIn?: () => void;
-  onZoomOut?: () => void;
-  onBackCenter?: () => void;
-  onToggleRoute?: () => void;
+  onZoomIn?: () => void
+  onZoomOut?: () => void
+  onBackCenter?: () => void
+  onToggleRoute?: () => void
 }) => {
   return (
     <Control
       position={(google) => google.ControlPosition.BOTTOM_CENTER}
-      id={"bottom-center-control"}
+      id={'bottom-center-control'}
       className="relative h-[72px]"
     >
       <div className="bg-[#fff] w-[480px] rounded-[24px] absolute left-0 -translate-x-1/2 flex justify-evenly px-[24px] py-[12px]">
@@ -30,11 +31,15 @@ export const BottomCenterControl = (props: {
           </div>
         )}
         {props.onToggleRoute && (
-          <div title="toggle route visible" className="cursor-pointer" onClick={props.onToggleRoute}>
+          <div
+            title="toggle route visible"
+            className="cursor-pointer"
+            onClick={props.onToggleRoute}
+          >
             <RouteLine />
           </div>
         )}
       </div>
     </Control>
-  );
-};
+  )
+}

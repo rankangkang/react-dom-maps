@@ -2,6 +2,9 @@
   "name": "@cmkk/react-google-map",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "exports": {
     "import": "./dist/index.es.js",
     "types": "./dist/index.d.ts"
@@ -11,53 +14,50 @@
     "README.md"
   ],
   "scripts": {
-    "prepare": "husky && husky install",
+    "build": "vite build",
     "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
     "build:types": "tsc",
-    "build": "vite build"
+    "lint": "eslint --fix",
+    "prepare": "husky && husky install",
+    "prettier": "prettier . --write"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "lint-staged": {
+    "**/*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "prettier --write -u"
+    ],
+    "!**/*.{js,ts,jsx,tsx}": "prettier --write -u"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@babel/cli": "^7.24.7",
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
-    "@cmkk/eslint-config": "^0.1.0",
-    "@cmkk/prettier-config": "^0.1.0",
-    "@commitlint/cli": "^17.0",
-    "@commitlint/config-conventional": "^17.0.0",
+    "@cmkk/commitlint-config": "^0.1.2",
+    "@cmkk/eslint-config": "^0.1.2",
+    "@cmkk/prettier-config": "^0.1.2",
+    "@commitlint/cli": "^19.0.0",
     "@types/google.maps": "^3.55.10",
     "@types/lodash": "^4.17.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "commitlint": "^17.0.0",
-    "eslint": "8",
-    "husky": "^8.0.3",
+    "eslint": "^8",
+    "husky": "^9.1",
     "lint-staged": "^14.0.1",
-    "prettier": "^3.3.2",
+    "prettier": "^3.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.5.2",
     "vite": "^6.1.0",
     "vite-plugin-dts": "^4.5.0"
   },
-  "dependencies": {
-    "@googlemaps/js-api-loader": "^1.16.6",
-    "lodash": "^4.17.21"
-  },
   "peerDependencies": {
     "react": ">=17",
     "react-dom": ">=17"
-  },
-  "lint-staged": {
-    "*.{js,jsx,cjs,mjs,ts,tsx,mts}": [
-      "eslint --fix"
-    ],
-    "*.{json,jsonc,md,mdx,html}": [
-      "prettier --write"
-    ]
   }
 }

@@ -1,6 +1,7 @@
 @import './tailwind.css';
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -9,5 +10,3 @@ html, body {
   margin: 0 auto;
   height: 100%;
 }
-
-
