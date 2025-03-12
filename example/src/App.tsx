@@ -17,7 +17,6 @@ const latLngAroundHK = [
   { lat: 22.3964, lng: 114.1095 },
   { lat: 22.3193, lng: 114.2115 },
   { lat: 22.3701, lng: 114.1142 },
-  { lat: 22.3193, lng: 114.1694 },
 ]
 
 const polygonLatLngs = [
@@ -33,9 +32,20 @@ const polygonOptions = {
   draggable: true,
 }
 
+const polylineLatLngs = [
+  { lat: 22.3193, lng: 114.2115 },
+  { lat: 22.3193, lng: 114.1694 },
+  { lat: 22.2855, lng: 114.1577 },
+  { lat: 22.3964, lng: 114.1095 },
+  { lat: 22.3701, lng: 114.1142 },
+]
+
 const polylineOptions = {
   strokeColor: '#fefefe',
   strokeOpacity: 0.5,
+  clickable: true,
+  editable: true,
+  draggable: true,
 }
 
 const circleOptions = {
@@ -82,15 +92,27 @@ function App() {
         ))}
         {visible && (
           <>
-            <Polyline path={latLngAroundHK} options={polylineOptions} />
+            <Polyline
+              path={polylineLatLngs}
+              options={polylineOptions}
+              onClick={() => {
+                console.log('polyline click')
+              }}
+              onChange={(_, nextPath) => {
+                console.log('polyline change', nextPath)
+              }}
+              onDragEnd={(_, nextPath) => {
+                console.log('polyline dragEnd', nextPath)
+              }}
+            />
             <Polygon
               paths={polygonLatLngs}
               options={polygonOptions}
-              onEditEnd={(nextPaths) => {
-                console.log('editEnd', nextPaths)
+              onChange={(_, nextPaths) => {
+                console.log('polygon change', nextPaths)
               }}
               onDragEnd={(_, nextPaths) => {
-                console.log('dragEnd', nextPaths)
+                console.log('polygon dragEnd', nextPaths)
               }}
             />
             <Circle

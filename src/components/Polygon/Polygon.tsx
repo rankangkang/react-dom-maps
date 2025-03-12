@@ -8,7 +8,7 @@ export interface PolygonProps {
   paths?: LatLng[]
   options?: Omit<google.maps.PolygonOptions, 'map'>
   onClick?: (e: google.maps.MapMouseEvent) => void
-  onEditEnd?: (nextPaths?: LatLng[]) => void
+  onChange?: (e: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => void
 
   onDragStart?: (e: google.maps.MapMouseEvent) => void
   onDrag?: (e: google.maps.MapMouseEvent) => void
@@ -56,8 +56,8 @@ export const Polygon = (props: PolygonProps) => {
       listeners.push(clickListener)
     }
 
-    if (polygonOptions?.editable && props.onEditEnd) {
-      const handler = () => {
+    if (polygonOptions?.editable && props.onChange) {
+      const handler = (e: google.maps.MapMouseEvent) => {
         const nextPaths = polygon
           .getPath()
           .getArray()
@@ -67,7 +67,7 @@ export const Polygon = (props: PolygonProps) => {
           }))
           .map(getLatLngLiteral)
 
-        props.onEditEnd?.(nextPaths)
+        props.onChange?.(e, nextPaths)
       }
 
       listeners.push(
