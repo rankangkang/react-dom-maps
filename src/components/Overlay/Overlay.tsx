@@ -1,50 +1,38 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng, OCType, PaneType } from '../../types'
+import { LatLng } from '../../types'
 
-import { getOverlayClass, type OverlayClass } from './OverlayClass'
+export interface OverlayProps {
+  image: string // 图片资源（URI 或 require 路径）
+  bounds: [LatLng, LatLng]
+  options?: Omit<google.maps.GroundOverlayOptions, 'map'>
 
-export interface OverlayViewProps {
-  pane?: PaneType
-  position?: LatLng
-  children?: React.ReactNode
-  zIndex?: number
-
-  clickable?: boolean
-  draggable?: boolean
-  onClick?: (event: google.maps.MapMouseEvent) => void
-  onDragStart?: (position: google.maps.LatLng) => void
-  onDragEnd?: (position: google.maps.LatLng) => void
+  onClick?: (e: google.maps.MapMouseEvent) => void
 }
 
-export const Overlay: OCType<OverlayViewProps> = (props) => {
-  const { children, pane = 'overlayLayer', position, zIndex, clickable, draggable } = props
+export const Overlay = (props: OverlayProps) => {
+  const { bounds, image, options } = props
   const { map, maps } = useGoogleMapContext()
-  const [overlay, setOverlay] = useState<OverlayClass | null>(null)
-  const container = overlay?.getElement()
-
-  const OverlayClass = getOverlayClass(maps)
+  const [overlay, setOverlay] = useState<google.maps.GroundOverlay | null>(null)
 
   useEffect(() => {
-    const overlay = new OverlayClass({
-      position,
-      pane,
-    })
-    overlay.setMap(map)
+    console.log('rerender')
+    const boundsObj = new maps.LatLngBounds(...bounds)
+    const overlay = new maps.GroundOverlay(image, boundsObj, { clickable: options?.clickable, map })
     setOverlay(overlay)
     return () => {
       overlay.setMap(null)
     }
-  }, [map])
+  }, [map, image, bounds, options?.clickable])
 
   useEffect(() => {
-    if (overlay) {
-      container!.style.zIndex = `${zIndex}`
-      overlay?.updatePosition(position)
+    if (!overlay) {
+      return
     }
-  }, [zIndex, position, overlay])
+
+    overlay.setOpacity(options?.opacity ?? 1)
+  }, [overlay, options])
 
   useEffect(() => {
     if (!overlay) {
@@ -52,16 +40,18 @@ export const Overlay: OCType<OverlayViewProps> = (props) => {
     }
 
     const listeners: google.maps.MapsEventListener[] = []
-    if (clickable && props.onClick) {
-      listeners.push(maps.event.addListener(overlay, 'click', props.onClick))
+    if (props.onClick) {
+      listeners.push(
+        overlay.addListener('click', (e: google.maps.MapMouseEvent) => {
+          props.onClick?.(e)
+        }),
+      )
     }
-
-    // TODO: draggable
 
     return () => {
-      listeners.forEach((l) => maps.event.removeListener(l))
+      listeners.forEach((listener) => listener.remove())
     }
-  }, [overlay, clickable, draggable])
+  }, [overlay])
 
-  return container ? ReactDOM.createPortal(<>{children}</>, container) : null
+  return null
 }

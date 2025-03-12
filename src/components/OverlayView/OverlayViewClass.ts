@@ -1,7 +1,7 @@
 import { LatLng, PaneType } from '../../types'
 import { createContainerDiv } from '../../utils/dom'
 
-export interface OverlayClass extends google.maps.OverlayView {
+export interface OverlayViewClass extends google.maps.OverlayView {
   getElement(): HTMLDivElement
 
   /**
@@ -16,7 +16,7 @@ export interface OverlayClass extends google.maps.OverlayView {
  * @param maps
  * @returns
  */
-export function createOverlayClass(maps: typeof google.maps = google.maps) {
+export function createOverlayViewClass(maps: typeof google.maps = google.maps) {
   return class OverlayClass extends maps.OverlayView {
     readonly container: HTMLDivElement
     readonly pane: PaneType
@@ -77,11 +77,11 @@ export function createOverlayClass(maps: typeof google.maps = google.maps) {
   }
 }
 
-let MemoOverlayClass: ReturnType<typeof createOverlayClass> | null = null
+let MemoOverlayClass: ReturnType<typeof createOverlayViewClass> | null = null
 
-export function getOverlayClass(maps: typeof google.maps = google.maps) {
+export function getOverlayViewClass(maps: typeof google.maps = google.maps) {
   if (!MemoOverlayClass) {
-    MemoOverlayClass = createOverlayClass(maps)
+    MemoOverlayClass = createOverlayViewClass(maps)
   }
   return MemoOverlayClass
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { useGoogleMap, GoogleMap, Polyline, Polygon, Circle } from '../../src'
+import { useGoogleMap, GoogleMap, Polyline, Polygon, Circle, Overlay, OverlayView } from '../../src'
+import { LatLng } from '../../src/types'
 
 import { BottomCenterControl } from './components/Control'
 import { Marker } from './components/Marker'
@@ -56,6 +57,16 @@ const circleOptions = {
   clickable: true,
 }
 
+const overlayBounds: [LatLng, LatLng] = [
+  { lat: 22.9042, lng: 116.4074 }, // 西南角
+  { lat: 23.7128, lng: 117.206 }, // 东北角
+]
+
+const overlayOptions = {
+  opacity: 1,
+  clickable: true,
+}
+
 function App() {
   const { api, ref } = useGoogleMap(defaultOptions)
   const [visible, setVisible] = useState<boolean>(true)
@@ -63,6 +74,9 @@ function App() {
   return (
     <div className="w-full h-full">
       <GoogleMap className="w-full h-full relative" api={api} containerRef={ref}>
+        <OverlayView>
+          <div>😁</div>
+        </OverlayView>
         <BottomCenterControl
           onZoomIn={() => {
             if (api?.map) {
@@ -125,6 +139,14 @@ function App() {
               }}
               onChange={(_, nextMeta) => {
                 console.log('circle change', nextMeta)
+              }}
+            />
+            <Overlay
+              image="https://picsum.photos/id/870/200/300?grayscale&blur=2"
+              bounds={overlayBounds}
+              options={overlayOptions}
+              onClick={(e) => {
+                console.log('overlay click', e)
               }}
             />
           </>
