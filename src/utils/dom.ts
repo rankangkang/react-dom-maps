@@ -30,15 +30,12 @@ export function cn(...args: ClassValue[]): string {
   return classes.join(' ')
 }
 
-export function createContainerDiv(options: { pane?: PaneType; className?: string } = {}) {
-  const { pane, className } = options
+export function createContainerDiv(options: { classList?: string[] } = {}) {
+  const { classList = [] } = options
   const div = document.createElement('div')
   div.style.position = 'absolute'
-  if (className) {
-    div.classList.add(className)
-  }
-  if (pane) {
-    div.classList.add(pane)
+  if (classList.length) {
+    div.classList.add(...classList)
   }
   return div
 }

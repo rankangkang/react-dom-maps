@@ -4,7 +4,7 @@ import { noop } from 'lodash'
 
 import { useGoogleMapContext } from '../../context'
 import { Draggable, LatLng, PaneType } from '../../types'
-import { createOverlayView } from '../Overlay/createOverlayView'
+import { createOverlayClass } from '../Overlay/OverlayClass'
 import { createContainerDiv } from '../../utils/dom'
 import { getLatLngLiteral } from '../../utils/helper'
 
@@ -37,7 +37,7 @@ export const MarkerOverlay: FC<PropsWithChildren<MarkerOverlayProps>> = (props) 
     onDragEnd,
   } = props
   const { map, maps } = useGoogleMapContext()
-  const container = useRef<HTMLDivElement>(createContainerDiv({ pane }))
+  const container = useRef<HTMLDivElement>(createContainerDiv({ classList: [pane] }))
   const overlay = useMemo(() => {
     return new (MarkerOverlayFactory(maps))({
       container: container.current,
@@ -71,7 +71,7 @@ export const MarkerOverlay: FC<PropsWithChildren<MarkerOverlayProps>> = (props) 
 }
 
 function MarkerOverlayFactory(maps: typeof google.maps = google.maps) {
-  return class OverlayView extends createOverlayView(maps) {
+  return class OverlayView extends createOverlayClass(maps) {
     public readonly container: HTMLDivElement
     public readonly position: LatLng
     public readonly pane: PaneType
