@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useGoogleMap, GoogleMap, Polyline, Polygon } from '../../src'
+import { useGoogleMap, GoogleMap, Polyline, Polygon, Circle } from '../../src'
 
 import { BottomCenterControl } from './components/Control'
 import { Marker } from './components/Marker'
@@ -36,6 +36,14 @@ const polygonOptions = {
 const polylineOptions = {
   strokeColor: '#fefefe',
   strokeOpacity: 0.5,
+}
+
+const circleOptions = {
+  center: { lat: 22.3193, lng: 114.1694 },
+  radius: 10000,
+  draggable: true,
+  editable: true,
+  clickable: true,
 }
 
 function App() {
@@ -83,6 +91,18 @@ function App() {
               }}
               onDragEnd={(_, nextPaths) => {
                 console.log('dragEnd', nextPaths)
+              }}
+            />
+            <Circle
+              options={circleOptions}
+              onDragEnd={(_, nextMeta) => {
+                console.log('circle drag end', nextMeta)
+              }}
+              onClick={(e) => {
+                console.log('circle click', e)
+              }}
+              onChange={(_, nextMeta) => {
+                console.log('circle change', nextMeta)
               }}
             />
           </>

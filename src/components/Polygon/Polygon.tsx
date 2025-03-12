@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
 import { LatLng } from '../../types'
@@ -16,42 +16,50 @@ export interface PolygonProps {
 }
 
 export const Polygon = (props: PolygonProps) => {
-  const {
-    onClick,
-    onEditEnd,
-    onDragStart,
-    onDrag,
-    onDragEnd,
-    paths,
-    options: polygonOptions,
-  } = props
+  const { paths, options: polygonOptions } = props
   const { map, maps } = useGoogleMapContext()
 
-  const polygonRef = useRef<google.maps.Polygon | null>(null)
+  const [polygon, setPolygon] = useState<google.maps.Polygon | null>(null)
 
   useEffect(() => {
-    polygonRef.current = new maps.Polygon({
+    const polygon = new maps.Polygon({
       map,
+    })
+    setPolygon(polygon)
+    return () => {
+      polygon?.setMap(null)
+    }
+  }, [map])
+
+  useEffect(() => {
+    if (!polygon) {
+      return
+    }
+
+    polygon.setOptions({
       paths,
       ...polygonOptions,
     })
+  }, [polygonOptions, paths, polygon])
+
+  // event
+  useEffect(() => {
+    if (!polygon) {
+      return
+    }
 
     const listeners: google.maps.MapsEventListener[] = []
-
-    if (polygonOptions?.clickable && onClick) {
-      const clickListener = polygonRef.current.addListener(
-        'click',
-        (e: google.maps.MapMouseEvent) => {
-          onClick?.(e)
-        },
-      )
+    if (polygonOptions?.clickable && props.onClick) {
+      const clickListener = polygon.addListener('click', (e: google.maps.MapMouseEvent) => {
+        props.onClick?.(e)
+      })
       listeners.push(clickListener)
     }
 
-    if (polygonOptions?.editable && onEditEnd) {
+    if (polygonOptions?.editable && props.onEditEnd) {
       const handler = () => {
-        const nextPaths = polygonRef.current
-          ?.getPath()
+        const nextPaths = polygon
+          .getPath()
           .getArray()
           .map((latLng) => ({
             latitude: latLng.lat(),
@@ -59,51 +67,50 @@ export const Polygon = (props: PolygonProps) => {
           }))
           .map(getLatLngLiteral)
 
-        onEditEnd(nextPaths)
+        props.onEditEnd?.(nextPaths)
       }
 
       listeners.push(
-        // polygonRef.current.getPath().addListener("set_at", handler),
-        polygonRef.current.getPath().addListener('insert_at', handler),
-        polygonRef.current.getPath().addListener('remove_at', handler),
+        // polygon.getPath().addListener("set_at", handler),
+        polygon.getPath().addListener('insert_at', handler),
+        polygon.getPath().addListener('remove_at', handler),
       )
     }
 
     if (polygonOptions?.draggable) {
-      if (onDragStart) {
+      if (props.onDragStart) {
         listeners.push(
-          polygonRef.current.addListener('dragstart', (e: google.maps.MapMouseEvent) => {
-            onDragStart(e)
+          polygon.addListener('dragstart', (e: google.maps.MapMouseEvent) => {
+            props.onDragStart?.(e)
           }),
         )
       }
 
-      if (onDrag) {
+      if (props.onDrag) {
         listeners.push(
-          polygonRef.current.addListener('drag', (e: google.maps.MapMouseEvent) => {
-            onDrag(e)
+          polygon.addListener('drag', (e: google.maps.MapMouseEvent) => {
+            props.onDrag?.(e)
           }),
         )
       }
 
-      if (onDragEnd) {
+      if (props.onDragEnd) {
         listeners.push(
-          polygonRef.current.addListener('dragend', (e: google.maps.MapMouseEvent) => {
+          polygon.addListener('dragend', (e: google.maps.MapMouseEvent) => {
             // 获取更新后的全部路径坐标
-            const paths = polygonRef.current?.getPath().getArray().map(getLatLngLiteral)
-            onDragEnd(e, paths)
+            const paths = polygon?.getPath().getArray().map(getLatLngLiteral)
+            props.onDragEnd?.(e, paths)
           }),
         )
       }
-    }
 
-    return () => {
-      listeners.forEach((listener) => {
-        maps.event.removeListener(listener)
-      })
-      polygonRef.current?.setMap(null)
+      return () => {
+        listeners.forEach((listener) => {
+          maps.event.removeListener(listener)
+        })
+      }
     }
-  }, [map, paths, polygonOptions])
+  }, [polygonOptions?.clickable, polygonOptions?.draggable, polygonOptions?.editable, polygon])
 
   return null
 }
