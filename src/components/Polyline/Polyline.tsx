@@ -1,65 +1,53 @@
-import { noop } from "lodash";
-import { FC, memo, useEffect, useState } from "react";
+import { noop } from 'lodash'
+import { FC, memo, useEffect, useState } from 'react'
 
-import { useGoogleMapContext } from "../../context";
+import { useGoogleMapContext } from '../../context'
 
-const defaultOptions = {};
+const defaultOptions = {}
 
 export interface PolylineProps {
-  visible?: boolean;
-  options?: Omit<google.maps.PolylineOptions, "path">;
+  options?: google.maps.PolylineOptions
   path?:
     | google.maps.MVCArray<google.maps.LatLng>
-    | (google.maps.LatLng | google.maps.LatLngLiteral)[];
+    | (google.maps.LatLng | google.maps.LatLngLiteral)[]
 
-  onMouseOut?: (e: google.maps.MapMouseEvent) => void;
-  onMouseOver?: (e: google.maps.MapMouseEvent) => void;
+  onMouseOut?: (e: google.maps.MapMouseEvent) => void
+  onMouseOver?: (e: google.maps.MapMouseEvent) => void
 }
 
 export const Polyline: FC<PolylineProps> = (props) => {
-  const { visible = true, options, path, onMouseOut, onMouseOver } = props;
-  const { map } = useGoogleMapContext();
-  const [instance, setInstance] = useState<google.maps.Polyline | null>(null);
+  const { options, path, onMouseOut, onMouseOver } = props
+  const { map } = useGoogleMapContext()
+  const [instance, setInstance] = useState<google.maps.Polyline | null>(null)
 
   useEffect(() => {
-    if (instance) {
-      instance.setVisible(visible);
-    }
-  }, [instance, visible]);
+    if (!instance) return noop
 
-  useEffect(() => {
-    if (!instance) return noop;
-
-    let listeners: google.maps.MapsEventListener[] = [];
+    let listeners: google.maps.MapsEventListener[] = []
     if (onMouseOut) {
-      const l = google.maps.event.addListener(instance, "mouseout", onMouseOut);
-      listeners.push(l);
+      const l = google.maps.event.addListener(instance, 'mouseout', onMouseOut)
+      listeners.push(l)
     }
     if (onMouseOver) {
-      const l = google.maps.event.addListener(
-        instance,
-        "mouseover",
-        onMouseOver,
-      );
-      listeners.push(l);
+      const l = google.maps.event.addListener(instance, 'mouseover', onMouseOver)
+      listeners.push(l)
     }
     return () => {
       listeners.forEach((l) => {
-        google.maps.event.removeListener(l);
-      });
-    };
-  }, [instance, onMouseOut, onMouseOver]);
+        google.maps.event.removeListener(l)
+      })
+    }
+  }, [instance, onMouseOut, onMouseOver])
 
   useEffect(() => {
-    const polyline = new google.maps.Polyline(options ?? defaultOptions);
-    path && polyline.setPath(path);
-    polyline.setVisible(visible);
-    polyline.setMap(map ?? null);
-    setInstance(polyline);
+    const polyline = new google.maps.Polyline(options ?? defaultOptions)
+    path && polyline.setPath(path)
+    polyline.setMap(map)
+    setInstance(polyline)
     return () => {
-      polyline.setMap(null);
-    };
-  }, [path, options, map]);
+      polyline.setMap(null)
+    }
+  }, [path, options, map])
 
-  return null;
-};
+  return null
+}

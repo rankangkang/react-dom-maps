@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-import { useGoogleMap, GoogleMap, Polyline } from '../../src'
+import { useGoogleMap, GoogleMap, Polyline, Polygon } from '../../src'
 
 import { BottomCenterControl } from './components/Control'
 import { Marker } from './components/Marker'
 import { defaultOptions } from './config'
 
-// // 生成一系列香港地点的经纬度，不要相同
+// 一些列香港经纬度
 const latLngAroundHK = [
   { lat: 22.3193, lng: 114.1694 },
   { lat: 22.3027, lng: 114.1772 },
@@ -20,8 +20,21 @@ const latLngAroundHK = [
   { lat: 22.3193, lng: 114.1694 },
 ]
 
-const polylineOptions = {
+const polygonLatLngs = [
+  { lat: 22.4, lng: 114 },
+  { lat: 22.4, lng: 114.2 },
+  { lat: 22.42, lng: 114.2 },
+  { lat: 22.42, lng: 114 },
+]
+
+const polygonOptions = {
   strokeColor: '#0000ce',
+  editable: true,
+  draggable: true,
+}
+
+const polylineOptions = {
+  strokeColor: '#fefefe',
   strokeOpacity: 0.5,
 }
 
@@ -59,7 +72,21 @@ function App() {
         {latLngAroundHK.map((latLng, idx) => (
           <Marker {...latLng} key={idx} origin="bottomCenter" originOffset={[0, 6]} />
         ))}
-        <Polyline path={latLngAroundHK} visible={visible} options={polylineOptions} />
+        {visible && (
+          <>
+            <Polyline path={latLngAroundHK} options={polylineOptions} />
+            <Polygon
+              paths={polygonLatLngs}
+              options={polygonOptions}
+              onEditEnd={(nextPaths) => {
+                console.log('editEnd', nextPaths)
+              }}
+              onDragEnd={(_, nextPaths) => {
+                console.log('dragEnd', nextPaths)
+              }}
+            />
+          </>
+        )}
       </GoogleMap>
     </div>
   )

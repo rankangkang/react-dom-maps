@@ -1,6 +1,6 @@
-import { PaneType } from "../types";
+import { PaneType } from '../types'
 
-type ClassValue = string | undefined | null | boolean | { [key: string]: any };
+type ClassValue = string | undefined | null | boolean | { [key: string]: any }
 
 /**
  * Combines multiple class names into a single string.
@@ -9,49 +9,36 @@ type ClassValue = string | undefined | null | boolean | { [key: string]: any };
  * @returns A single string with all valid class names.
  */
 export function cn(...args: ClassValue[]): string {
-  const classes: string[] = [];
+  const classes: string[] = []
 
   args.forEach((arg) => {
-    if (!arg) return;
+    if (!arg) return
 
-    if (typeof arg === "string") {
-      classes.push(arg);
+    if (typeof arg === 'string') {
+      classes.push(arg)
     } else if (Array.isArray(arg)) {
-      classes.push(cn(...arg));
-    } else if (typeof arg === "object") {
+      classes.push(cn(...arg))
+    } else if (typeof arg === 'object') {
       for (const key in arg) {
         if (arg[key]) {
-          classes.push(key);
+          classes.push(key)
         }
       }
     }
-  });
+  })
 
-  return classes.join(" ");
+  return classes.join(' ')
 }
 
-export const getLatLngLiteral = (
-  location?: google.maps.LatLng | google.maps.LatLngLiteral | null,
-) => {
-  const lat = location?.lat || undefined;
-  const lng = location?.lng || undefined;
-  return {
-    lat: Number(typeof lat === "function" ? lat() : lat),
-    lng: Number(typeof lng === "function" ? lng() : lng),
-  };
-};
-
-export function createContainerDiv(
-  options: { pane?: PaneType; className?: string } = {},
-) {
-  const { pane, className } = options;
-  const div = document.createElement("div");
-  div.style.position = "absolute";
+export function createContainerDiv(options: { pane?: PaneType; className?: string } = {}) {
+  const { pane, className } = options
+  const div = document.createElement('div')
+  div.style.position = 'absolute'
   if (className) {
-    div.classList.add(className);
+    div.classList.add(className)
   }
   if (pane) {
-    div.classList.add(pane);
+    div.classList.add(pane)
   }
-  return div;
+  return div
 }
