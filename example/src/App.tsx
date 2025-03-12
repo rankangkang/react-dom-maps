@@ -5,7 +5,7 @@ import { LatLng } from '../../src/types'
 
 import { BottomCenterControl } from './components/Control'
 import { Marker } from './components/Marker'
-import { defaultOptions } from './config'
+import { defaultOptions, LAT_LNG_HK } from './config'
 
 // 一些列香港经纬度
 const latLngAroundHK = [
@@ -70,13 +70,14 @@ const overlayOptions = {
 function App() {
   const { api, ref } = useGoogleMap(defaultOptions)
   const [visible, setVisible] = useState<boolean>(true)
+  const [dragMarker, setDragMarker] = useState<LatLng>({
+    lat: 22.2697,
+    lng: 113.9455,
+  })
 
   return (
     <div className="w-full h-full">
       <GoogleMap className="w-full h-full relative" api={api} containerRef={ref}>
-        <OverlayView>
-          <div>😁</div>
-        </OverlayView>
         <BottomCenterControl
           onZoomIn={() => {
             if (api?.map) {
@@ -104,6 +105,19 @@ function App() {
         {latLngAroundHK.map((latLng, idx) => (
           <Marker {...latLng} key={idx} origin="bottomCenter" originOffset={[0, 6]} />
         ))}
+        <Marker
+          width={40}
+          height={40}
+          {...dragMarker}
+          origin="bottomCenter"
+          originOffset={[0, 12]}
+          draggable
+          onDragEnd={(_, data) => {
+            if (data) {
+              setDragMarker(data.latlng)
+            }
+          }}
+        />
         {visible && (
           <>
             <Polyline

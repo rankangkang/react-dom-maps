@@ -1,17 +1,20 @@
 import { isNumber, omit } from 'lodash'
 import React, { FC, PropsWithChildren, memo, useMemo } from 'react'
 
-import { OCType } from '../../types'
+import {
+  OverlayViewDraggable,
+  OverlayViewOrigin,
+  OverlayViewOriginOffset,
+} from '../OverlayView/types'
+import { OverlayView } from '../OverlayView'
+import { GMAdapter } from '../../types'
 
-import { MarkerDraggable, MarkerOrigin, MarkerOriginOffset } from './types'
-import { MarkerOverlay } from './MarkerOverlay'
-
-export interface MarkerProps extends MarkerDraggable {
+export interface MarkerProps extends OverlayViewDraggable {
   lat: number
   lng: number
   zIndex?: number
-  origin?: MarkerOrigin
-  originOffset?: number | MarkerOriginOffset
+  origin?: OverlayViewOrigin
+  originOffset?: number | OverlayViewOriginOffset
 }
 
 /**
@@ -19,20 +22,20 @@ export interface MarkerProps extends MarkerDraggable {
  * @param props
  * @returns
  */
-export const Marker: FC<PropsWithChildren<MarkerProps>> = (props) => {
+export const Marker: GMAdapter<PropsWithChildren<MarkerProps>> = (props) => {
   if (!React.isValidElement(props.children)) {
     return null
   }
 
   const { lat, lng, originOffset = [0, 0], ...rest } = props
   const position = useMemo(() => ({ lat, lng }), [lat, lng])
-  const nextOriginOffset: MarkerOriginOffset = isNumber(originOffset)
+  const nextOriginOffset: OverlayViewOriginOffset = isNumber(originOffset)
     ? [originOffset, originOffset]
     : originOffset
 
   return (
-    <MarkerOverlay pane="floatPane" position={position} originOffset={nextOriginOffset} {...rest}>
+    <OverlayView pane="floatPane" position={position} originOffset={nextOriginOffset} {...rest}>
       {props.children}
-    </MarkerOverlay>
+    </OverlayView>
   )
 }

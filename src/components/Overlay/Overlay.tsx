@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng } from '../../types'
+import { GMAdapter, LatLng } from '../../types'
 
 export interface OverlayProps {
   image: string // 图片资源（URI 或 require 路径）
@@ -11,13 +11,12 @@ export interface OverlayProps {
   onClick?: (e: google.maps.MapMouseEvent) => void
 }
 
-export const Overlay = (props: OverlayProps) => {
+export const Overlay: GMAdapter<OverlayProps> = (props) => {
   const { bounds, image, options } = props
   const { map, maps } = useGoogleMapContext()
   const [overlay, setOverlay] = useState<google.maps.GroundOverlay | null>(null)
 
   useEffect(() => {
-    console.log('rerender')
     const boundsObj = new maps.LatLngBounds(...bounds)
     const overlay = new maps.GroundOverlay(image, boundsObj, { clickable: options?.clickable, map })
     setOverlay(overlay)

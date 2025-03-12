@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
 import { getLatLngLiteral } from '../../utils/helper'
-import { LatLng } from '../../types'
+import { GMAdapter, LatLng } from '../../types'
 
 export interface PolylineProps {
   options?: Omit<google.maps.PolylineOptions, 'map'>
@@ -21,7 +21,7 @@ export interface PolylineProps {
   onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
 }
 
-export const Polyline: FC<PolylineProps> = (props) => {
+export const Polyline: GMAdapter<PolylineProps> = (props) => {
   const { options: polylineOptions, path } = props
   const { map } = useGoogleMapContext()
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null)

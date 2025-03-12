@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng } from '../../types'
+import { GMAdapter, LatLng } from '../../types'
 import { getLatLngLiteral } from '../../utils/helper'
 
 export interface PolygonProps {
@@ -15,7 +15,7 @@ export interface PolygonProps {
   onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
 }
 
-export const Polygon = (props: PolygonProps) => {
+export const Polygon: GMAdapter<PolygonProps> = (props) => {
   const { paths, options: polygonOptions } = props
   const { map, maps } = useGoogleMapContext()
 

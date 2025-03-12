@@ -1,39 +1,40 @@
-import { isFunction } from "lodash";
-import { PropsWithChildren, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { isFunction } from 'lodash'
+import { PropsWithChildren, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
-import { useGoogleMapContext } from "../../context";
+import { useGoogleMapContext } from '../../context'
+import { GMAdapter } from '../../types'
 
 export interface ControlProps {
-  id: string;
+  id: string
   position:
     | google.maps.ControlPosition
-    | ((maps: typeof google.maps) => google.maps.ControlPosition);
-  className?: string;
+    | ((maps: typeof google.maps) => google.maps.ControlPosition)
+  className?: string
 }
 
-export const Control: React.FC<PropsWithChildren<ControlProps>> = (props) => {
-  const { id, position, className = "", children } = props;
-  const { map, maps } = useGoogleMapContext();
-  const divRef = useRef<HTMLDivElement>(document.createElement("div"));
-  const finalPosition = isFunction(position) ? position(maps) : position;
+export const Control: GMAdapter<PropsWithChildren<ControlProps>> = (props) => {
+  const { id, position, className = '', children } = props
+  const { map, maps } = useGoogleMapContext()
+  const divRef = useRef<HTMLDivElement>(document.createElement('div'))
+  const finalPosition = isFunction(position) ? position(maps) : position
 
   useEffect(() => {
-    divRef.current.dataset.id = id;
-    map.controls[finalPosition].push(divRef.current);
+    divRef.current.dataset.id = id
+    map.controls[finalPosition].push(divRef.current)
 
     return () => {
       map.controls[finalPosition].forEach((e, index) => {
         if (e.dataset.id === id) {
-          map.controls[finalPosition].removeAt(index);
+          map.controls[finalPosition].removeAt(index)
         }
-      });
-    };
-  }, [id, finalPosition, map]);
+      })
+    }
+  }, [id, finalPosition, map])
 
   useEffect(() => {
-    divRef.current.className = className;
-  }, [className]);
+    divRef.current.className = className
+  }, [className])
 
-  return createPortal(children, divRef.current, id);
-};
+  return createPortal(children, divRef.current, id)
+}
