@@ -5,6 +5,7 @@
   "keywords": [],
   "license": "ISC",
   "author": "",
+  "type": "module",
   "exports": {
     "import": "./dist/index.es.js",
     "types": "./dist/index.d.ts"
@@ -17,9 +18,11 @@
     "build": "vite build",
     "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
     "build:types": "tsc",
+    "build-storybook": "storybook build",
     "lint": "eslint --fix",
     "prepare": "husky && husky install",
-    "prettier": "prettier . --write"
+    "prettier": "prettier . --write",
+    "storybook": "storybook dev -p 6006"
   },
   "lint-staged": {
     "**/*.{js,ts,jsx,tsx}": [
@@ -38,20 +41,32 @@
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
+    "@chromatic-com/storybook": "^3.2.5",
     "@cmkk/commitlint-config": "^0.1.2",
     "@cmkk/eslint-config": "^0.1.2",
     "@cmkk/prettier-config": "^0.1.2",
     "@commitlint/cli": "^19.0.0",
+    "@storybook/addon-essentials": "^8.6.4",
+    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/addon-onboarding": "^8.6.4",
+    "@storybook/blocks": "^8.6.4",
+    "@storybook/react": "^8.6.4",
+    "@storybook/react-vite": "^8.6.4",
+    "@storybook/test": "^8.6.4",
+    "@tailwindcss/vite": "^4.0.13",
     "@types/google.maps": "^3.55.10",
     "@types/lodash": "^4.17.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "eslint": "^8",
+    "eslint-plugin-storybook": "^0.11.4",
     "husky": "^9.1",
     "lint-staged": "^14.0.1",
     "prettier": "^3.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "storybook": "^8.6.4",
+    "tailwindcss": "^4.0.13",
     "typescript": "^5.5.2",
     "vite": "^6.1.0",
     "vite-plugin-dts": "^4.5.0"

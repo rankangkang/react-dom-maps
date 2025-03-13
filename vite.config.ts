@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   build: {
@@ -20,5 +21,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts({ rollupTypes: true, insertTypesEntry: true })],
+  plugins: [dts({ rollupTypes: true, insertTypesEntry: true }), tailwindcss()],
 })

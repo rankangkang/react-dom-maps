@@ -4,3 +4,4 @@ lib
 types
 **/.DS_Store
 .env*
+*storybook.log
