@@ -44,6 +44,9 @@ importers:
       '@commitlint/cli':
         specifier: ^19.0.0
         version: 19.8.0(@types/node@20.5.1)(typescript@5.7.3)
+      '@storybook/addon-docs':
+        specifier: ^8.6.4
+        version: 8.6.4(@types/react@18.3.18)(storybook@8.6.4(prettier@3.5.1))
       '@storybook/addon-essentials':
         specifier: ^8.6.4
         version: 8.6.4(@types/react@18.3.18)(storybook@8.6.4(prettier@3.5.1))

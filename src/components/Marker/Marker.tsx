@@ -1,5 +1,5 @@
 import { isNumber, omit } from 'lodash'
-import React, { FC, PropsWithChildren, memo, useMemo } from 'react'
+import React, { FC, PropsWithChildren, ReactNode, memo, useMemo } from 'react'
 
 import {
   OverlayViewDraggable,
@@ -7,22 +7,36 @@ import {
   OverlayViewOriginOffset,
 } from '../OverlayView/types'
 import { OverlayView } from '../OverlayView'
-import { GMAdapter } from '../../types'
+import { LatLng } from '../../types'
 
-export interface MarkerProps extends OverlayViewDraggable {
+export interface MarkerProps {
+  /** latitude */
   lat: number
+  /** longitude */
   lng: number
+  /** z-index */
   zIndex?: number
+  /** marker origin */
   origin?: OverlayViewOrigin
+  /** marker origin offset */
   originOffset?: number | OverlayViewOriginOffset
+  /** your custom marker element */
+  children?: ReactNode
+
+  /** if set true, element is draggable */
+  draggable?: boolean
+  /** drag event callback */
+  onDrag?(e: MouseEvent, data: { latlng: LatLng }): void
+  /** dragstart event callback */
+  onDragStart?(e: MouseEvent, data: { latlng: LatLng }): void
+  /** dragend event callback */
+  onDragEnd?(e: MouseEvent, data: { latlng: LatLng }): void
 }
 
 /**
- * use Marker to wrap your marker icon
- * @param props
- * @returns
+ * Display custom marker on map
  */
-export const Marker: GMAdapter<PropsWithChildren<MarkerProps>> = (props) => {
+export const Marker = (props: MarkerProps) => {
   if (!React.isValidElement(props.children)) {
     return null
   }

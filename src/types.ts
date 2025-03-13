@@ -13,6 +13,7 @@ export type LatLng = google.maps.LatLngLiteral
 export type PaneType = keyof NonNullable<google.maps.MapPanes>
 
 export type Draggable<T = any> = {
+  /** if set true, element is draggable */
   draggable?: boolean
   onDrag?(e: MouseEvent, params: T): void
   onDragStart?(e: MouseEvent, params: T): void

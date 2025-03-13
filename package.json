@@ -46,6 +46,7 @@
     "@cmkk/eslint-config": "^0.1.2",
     "@cmkk/prettier-config": "^0.1.2",
     "@commitlint/cli": "^19.0.0",
+    "@storybook/addon-docs": "^8.6.4",
     "@storybook/addon-essentials": "^8.6.4",
     "@storybook/addon-interactions": "^8.6.4",
     "@storybook/addon-onboarding": "^8.6.4",
