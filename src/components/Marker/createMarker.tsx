@@ -1,7 +1,5 @@
 import { omit } from 'lodash'
-import React from 'react'
-
-import { GMAdapter } from '../../types'
+import React, { ComponentType } from 'react'
 
 import { Marker, MarkerProps } from './Marker'
 
@@ -12,7 +10,7 @@ import { Marker, MarkerProps } from './Marker'
 export function createMarker<M extends MarkerProps, T extends object>(
   WrappedMarker: React.ComponentType<T>,
 ) {
-  const NextMarker: GMAdapter<M & T> = (props) => {
+  const NextMarker: ComponentType<M & T> = (props) => {
     const pickedProps = {
       ...omit(props, 'children'),
     }

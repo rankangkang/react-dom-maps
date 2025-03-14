@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { GMAdapter, LatLng } from '../../types'
+import { LatLng } from '../../types'
 import { getLatLngLiteral } from '../../utils/helper'
 
 export interface PolygonProps {

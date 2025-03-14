@@ -1,9 +1,9 @@
 import { noop } from 'lodash'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
 import { getLatLngLiteral } from '../../utils/helper'
-import { GMAdapter, LatLng } from '../../types'
+import { LatLng } from '../../types'
 
 export interface PolylineProps {
   /** polyline path */

@@ -5,7 +5,7 @@ export interface GoogleMapApi {
   maps: typeof google.maps
 }
 
-export type LatLng = google.maps.LatLngLiteral
+export type LatLng = google.maps.LatLngLiteral | google.maps.LatLng
 
 /**
  * paneType z-index sequence: floatPane > overlayMouseTarget > markerLayer > overlayLayer > mapPane
@@ -19,10 +19,3 @@ export type Draggable<T = any> = {
   onDragStart?(e: MouseEvent, params: T): void
   onDragEnd?(e: MouseEvent, params: T): void
 }
-
-export type GMAdapter<
-  Props,
-  Ref extends { instance: any } | undefined = undefined,
-> = Ref extends undefined
-  ? React.ComponentType<Props>
-  : React.ForwardRefExoticComponent<Props & React.RefAttributes<Ref>>

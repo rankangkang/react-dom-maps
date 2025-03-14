@@ -2,7 +2,7 @@ import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from
 import ReactDOM from 'react-dom'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng, GMAdapter, PaneType } from '../../types'
+import { LatLng, PaneType } from '../../types'
 import { createContainerDiv } from '../../utils/dom'
 
 import { getOverlayViewClass, type OverlayViewClass } from './OverlayViewClass'
@@ -21,7 +21,7 @@ export interface OverlayViewProps extends OverlayViewDraggable {
   onClick?: (event: google.maps.MapMouseEvent) => void
 }
 
-export const OverlayView: GMAdapter<OverlayViewProps> = (props) => {
+export const OverlayView = (props: OverlayViewProps) => {
   const {
     className,
     pane = 'overlayMouseTarget',
