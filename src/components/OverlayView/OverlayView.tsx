@@ -1,13 +1,15 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { useGoogleMapContext } from '../../context'
 import { LatLng, GMAdapter, PaneType } from '../../types'
+import { createContainerDiv } from '../../utils/dom'
 
 import { getOverlayViewClass, type OverlayViewClass } from './OverlayViewClass'
 import { OverlayViewDraggable, OverlayViewOrigin, OverlayViewOriginOffset } from './types'
 
 export interface OverlayViewProps extends OverlayViewDraggable {
+  className: string
   pane?: PaneType
   position: LatLng
   children?: React.ReactNode
@@ -21,6 +23,7 @@ export interface OverlayViewProps extends OverlayViewDraggable {
 
 export const OverlayView: GMAdapter<OverlayViewProps> = (props) => {
   const {
+    className,
     pane = 'overlayMouseTarget',
     position,
     zIndex,
@@ -36,33 +39,14 @@ export const OverlayView: GMAdapter<OverlayViewProps> = (props) => {
     onClick,
   } = props
   const { map, maps } = useGoogleMapContext()
-  const [view, setView] = useState<OverlayViewClass | null>(null)
-  const container = view?.getElement()
+  const container = useCreateContainer([pane, className].filter(Boolean).join(' '))
   const OverlayViewClass = getOverlayViewClass(maps)
 
   useEffect(() => {
-    const view = new OverlayViewClass()
-    view.setMap(map)
-    setView(view)
-    return () => {
-      view.setMap(null)
-    }
-  }, [map])
-
-  useEffect(() => {
-    if (!container) {
-      return
-    }
-    container!.style.zIndex = `${zIndex}`
-  }, [zIndex, container])
-
-  useEffect(() => {
-    if (!view) {
-      return
-    }
-
-    view.setOptions({
+    const view = new OverlayViewClass({
+      container,
       position,
+      pane,
       origin,
       originOffset,
       draggable: {
@@ -72,12 +56,9 @@ export const OverlayView: GMAdapter<OverlayViewProps> = (props) => {
         onDragEnd,
       },
     })
-  }, [view, position, origin, originOffset, draggable, pane])
+    view.setMap(map)
 
-  useEffect(() => {
-    if (!view) {
-      return
-    }
+    view.getElement().style.zIndex = typeof zIndex === 'number' ? String(zIndex) : (zIndex ?? '0')
 
     const listeners: google.maps.MapsEventListener[] = []
     if (clickable && onClick) {
@@ -85,9 +66,18 @@ export const OverlayView: GMAdapter<OverlayViewProps> = (props) => {
     }
 
     return () => {
+      view.setMap(null)
       listeners.forEach((l) => maps.event.removeListener(l))
     }
-  }, [view, clickable])
+  }, [container, position, origin, originOffset, draggable, pane, zIndex, clickable])
 
   return container ? ReactDOM.createPortal(<>{children}</>, container) : null
+}
+
+function useCreateContainer(className: string) {
+  const container = useMemo(() => {
+    return createContainerDiv({ className })
+  }, [className])
+
+  return container
 }

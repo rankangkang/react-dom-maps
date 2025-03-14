@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { createMarker } from '../..'
-
 export const PinIcon = (props: { width?: number; height?: number }) => {
   return (
     <svg

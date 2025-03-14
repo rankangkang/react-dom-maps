@@ -10,9 +10,6 @@ importers:
       '@googlemaps/js-api-loader':
         specifier: ^1.16.6
         version: 1.16.8
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
     devDependencies:
       '@babel/cli':
         specifier: ^7.24.7
@@ -53,9 +50,6 @@ importers:
       '@storybook/addon-interactions':
         specifier: ^8.6.4
         version: 8.6.4(storybook@8.6.4(prettier@3.5.1))
-      '@storybook/addon-onboarding':
-        specifier: ^8.6.4
-        version: 8.6.4(storybook@8.6.4(prettier@3.5.1))
       '@storybook/blocks':
         specifier: ^8.6.4
         version: 8.6.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.4(prettier@3.5.1))
@@ -83,6 +77,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.5(@types/react@18.3.18)
+      '@types/supercluster':
+        specifier: ^7.1.3
+        version: 7.1.3
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -95,6 +92,9 @@ importers:
       lint-staged:
         specifier: ^14.0.1
         version: 14.0.1
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       prettier:
         specifier: ^3.4.2
         version: 3.5.1
@@ -107,12 +107,18 @@ importers:
       storybook:
         specifier: ^8.6.4
         version: 8.6.4(prettier@3.5.1)
+      supercluster:
+        specifier: ^8.0.1
+        version: 8.0.1
       tailwindcss:
         specifier: ^4.0.13
         version: 4.0.13
       typescript:
         specifier: ^5.5.2
         version: 5.7.3
+      use-deep-compare-effect:
+        specifier: ^1.8.1
+        version: 1.8.1(react@18.3.1)
       vite:
         specifier: ^6.1.0
         version: 6.1.0(@types/node@20.5.1)(jiti@2.4.2)(lightningcss@1.29.2)
@@ -1805,14 +1811,6 @@ packages:
     peerDependencies:
       storybook: ^8.6.4
 
-  '@storybook/addon-onboarding@8.6.4':
-    resolution:
-      {
-        integrity: sha512-Co/E93Lr3jWdc7+6WQO8DOjfAf1/o25TcqSJWK7dyfH6YimC8QeE9NPpaVshdVzbBajbc4CD7sUDCN7CiI34JA==,
-      }
-    peerDependencies:
-      storybook: ^8.6.4
-
   '@storybook/addon-outline@8.6.4':
     resolution:
       {
@@ -2197,6 +2195,12 @@ packages:
         integrity: sha512-C3YYeRQWp2fmq9OryX+FoDy8nXS6scQ7dPptD8LnFDAUNcKWJjXQKDNJD3HVm+kOUsXhTOkpi69vI4EuAr95bA==,
       }
 
+  '@types/geojson@7946.0.16':
+    resolution:
+      {
+        integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==,
+      }
+
   '@types/google.maps@3.58.1':
     resolution:
       {
@@ -2263,6 +2267,12 @@ packages:
     resolution:
       {
         integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==,
+      }
+
+  '@types/supercluster@7.1.3':
+    resolution:
+      {
+        integrity: sha512-Z0pOY34GDFl3Q6hUFYf3HkTwKEE02e7QgtJppBt+beEAxnyOpJua+voGFvxINBHa06GwLFFym7gRPY2SiKIfIA==,
       }
 
   '@types/uuid@9.0.8':
@@ -4490,6 +4500,12 @@ packages:
       }
     engines: { node: '>=4.0' }
 
+  kdbush@4.0.2:
+    resolution:
+      {
+        integrity: sha512-WbCVYJ27Sz8zi9Q7Q0xHC+05iwkm3Znipc2XTlrnJbsHMYktW4hPhXUE8Ys1engBrvffoSCqbil1JQAa7clRpA==,
+      }
+
   keyv@4.5.4:
     resolution:
       {
@@ -5841,6 +5857,12 @@ packages:
       }
     engines: { node: '>=8' }
 
+  supercluster@8.0.1:
+    resolution:
+      {
+        integrity: sha512-IiOea5kJ9iqzD2t7QJq/cREyLHTtSmUT6gQsweojg9WH2sYJqZK9SswTu6jrscO6D1G5v5vYZ9ru/eq85lXeZQ==,
+      }
+
   supports-color@7.2.0:
     resolution:
       {
@@ -6145,6 +6167,15 @@ packages:
       {
         integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==,
       }
+
+  use-deep-compare-effect@1.8.1:
+    resolution:
+      {
+        integrity: sha512-kbeNVZ9Zkc0RFGpfMN3MNfaKNvcLNyxOAAd9O4CBZ+kCBXXscn9s/4I+8ytUER4RDpEYs5+O6Rs4PqiZ+rHr5Q==,
+      }
+    engines: { node: '>=10', npm: '>=6' }
+    peerDependencies:
+      react: '>=16.13'
 
   util@0.12.5:
     resolution:
@@ -7628,10 +7659,6 @@ snapshots:
       storybook: 8.6.4(prettier@3.5.1)
       tiny-invariant: 1.3.3
 
-  '@storybook/addon-onboarding@8.6.4(storybook@8.6.4(prettier@3.5.1))':
-    dependencies:
-      storybook: 8.6.4(prettier@3.5.1)
-
   '@storybook/addon-outline@8.6.4(storybook@8.6.4(prettier@3.5.1))':
     dependencies:
       '@storybook/global': 5.0.0
@@ -7898,6 +7925,8 @@ snapshots:
 
   '@types/gensync@1.0.4': {}
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/google.maps@3.58.1': {}
 
   '@types/json-schema@7.0.15': {}
@@ -7924,6 +7953,10 @@ snapshots:
   '@types/resolve@1.20.6': {}
 
   '@types/semver@7.5.8': {}
+
+  '@types/supercluster@7.1.3':
+    dependencies:
+      '@types/geojson': 7946.0.16
 
   '@types/uuid@9.0.8': {}
 
@@ -9428,6 +9461,8 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
+  kdbush@4.0.2: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -10230,6 +10265,10 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
+  supercluster@8.0.1:
+    dependencies:
+      kdbush: 4.0.2
+
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -10387,6 +10426,12 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  use-deep-compare-effect@1.8.1(react@18.3.1):
+    dependencies:
+      '@babel/runtime': 7.26.7
+      dequal: 2.0.3
+      react: 18.3.1
 
   util@0.12.5:
     dependencies:
