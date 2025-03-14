@@ -1,31 +1,32 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Polygon } from '../components/Polygon/Polygon'
-import { LatLng } from '../types'
+import { Polyline } from '../components/Polyline'
+import { Polygon } from '../components/Polygon'
 import { Control } from '../components/Control'
+import { LatLng } from '../types'
 
 import { ExampleGoogleMap } from './common'
 
-const polygonLatLngs = [
-  { lat: 22.3, lng: 114.1 },
-  { lat: 22.3, lng: 114.2 },
-  { lat: 22.4, lng: 114.2 },
-  { lat: 22.4, lng: 114.1 },
+const polylineLatLngs = [
+  { lat: 22.3193, lng: 114.2115 },
+  { lat: 22.3193, lng: 114.1694 },
+  { lat: 22.2855, lng: 114.1577 },
+  { lat: 22.3964, lng: 114.1095 },
+  { lat: 22.3701, lng: 114.1142 },
 ]
 
-const meta: Meta<typeof Polygon> = {
-  component: Polygon,
+const meta: Meta<typeof Polyline> = {
+  component: Polyline,
   args: {
-    paths: polygonLatLngs,
+    path: polylineLatLngs,
     options: {
+      strokeColor: '#000',
+      strokeOpacity: 0.8,
+      strokeWeight: 5,
+      clickable: false,
       editable: false,
       draggable: false,
-      clickable: false,
-      strokeColor: '#000',
-      strokeOpacity: 0.5,
-      fillColor: '#000',
-      fillOpacity: 0.5,
     },
     // onChange: () => {},
     // onClick: () => {},
@@ -33,31 +34,32 @@ const meta: Meta<typeof Polygon> = {
     // onDrag: () => {},
     // onDragEnd: () => {},
   },
-  tags: ['autodocs'],
+  argTypes: {},
 }
 
 export default meta
 
-type Story = StoryObj<typeof Polygon>
+type Story = StoryObj<typeof Polyline>
 
-export const SimplePolygon: Story = {
+export const SimplePolyline: Story = {
   render(args) {
     return (
       <ExampleGoogleMap>
-        <Polygon {...args} />
+        <Polyline {...args} />
       </ExampleGoogleMap>
     )
   },
 }
 
-export const DraggablePolygon: Story = {
+export const DraggablePolyline: Story = {
   args: {
     options: {
+      strokeWeight: 8,
       draggable: true,
     },
   },
   render(args) {
-    const [paths, setPaths] = useState<LatLng[]>(args.paths || [])
+    const [paths, setPaths] = useState<LatLng[]>(args.path || [])
     const [isDragging, setIsDragging] = useState<boolean>(false)
 
     const onDragStart = useCallback(() => {
@@ -86,20 +88,21 @@ export const DraggablePolygon: Story = {
             </p>
           </div>
         </Control>
-        <Polygon {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
+
+        <Polyline {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
       </ExampleGoogleMap>
     )
   },
 }
 
-export const EditablePolygon: Story = {
+export const EditablePolyline: Story = {
   args: {
     options: {
       editable: true,
     },
   },
   render(args) {
-    const [paths, setPaths] = useState<LatLng[]>(args.paths || [])
+    const [paths, setPaths] = useState<LatLng[]>(args.path || [])
     const onChange = useCallback((_: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => {
       if (nextPaths) {
         setPaths(nextPaths)
@@ -117,7 +120,7 @@ export const EditablePolygon: Story = {
             </p>
           </div>
         </Control>
-        <Polygon {...args} onChange={onChange} />
+        <Polyline {...args} onChange={onChange} />
       </ExampleGoogleMap>
     )
   },
