@@ -1,14 +1,17 @@
-name: gh-pages
+name: deploy storybook static to gh-pages
 
 on:
   push:
     branches:
       - main
       - feature-storybook
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build and publish storybook
+    name: build and deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -28,19 +31,11 @@ jobs:
         run: |
           pnpm build:storybook
 
-      - name: deploy
+      - name: deploy with gh-pages
         env:
-          GH_REF: github.com/rankangkang/react-dom-mount.git
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAGES }}
+          STATIC_PATH: storybook-static
+          BRANCH: gh-pages
         run: |
-          git config --global user.name "rankangkang"
-          git config --global user.email "rankangkang@foxmail.com"
-          git clone https://${GH_REF} .deploy_git
-          cd .deploy_git
-          git checkout gh-pages
-          cd ../
-          mv .deploy_git/.git/ ./storybook-static
-          cd ./storybook-static
-          git add .
-          git commit -m ":construction_worker:CI built at `date +"%Y-%m-%d %H:%M:%S"`"
-          git push --force --quiet "https://${ACCESS_TOKEN}@${GH_REF}" gh-pages:gh-pages
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d ${STATIC_PATH} -b ${BRANCH} -u "github-actions-bot <support+actions@github.com>"

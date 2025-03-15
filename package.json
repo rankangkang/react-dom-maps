@@ -17,12 +17,13 @@
   "scripts": {
     "build": "vite build -c vite.lib.config.ts",
     "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
-    "build:storybook": "storybook build",
     "build:types": "tsc",
     "lint": "eslint --fix",
     "prepare": "husky && husky install",
     "prettier": "prettier . --write",
-    "storybook": "storybook dev -p 6006"
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "storybook:deploy": "gh-pages -d storybook-static --branch gh-pages -m 'manual deployed'"
   },
   "lint-staged": {
     "**/*.{js,ts,jsx,tsx}": [
@@ -60,6 +61,7 @@
     "@types/supercluster": "^7.1.3",
     "eslint": "^8",
     "eslint-plugin-storybook": "^0.11.4",
+    "gh-pages": "^6.3.0",
     "husky": "^9.1",
     "lint-staged": "^14.0.1",
     "lodash": "^4.17.21",
