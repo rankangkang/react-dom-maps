@@ -9,7 +9,7 @@ import { getOverlayViewClass, type OverlayViewClass } from './OverlayViewClass'
 import { OverlayViewDraggable, OverlayViewOrigin, OverlayViewOriginOffset } from './types'
 
 export interface OverlayViewProps extends OverlayViewDraggable {
-  className: string
+  className?: string
   pane?: PaneType
   position: LatLng
   children?: React.ReactNode

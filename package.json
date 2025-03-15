@@ -17,8 +17,8 @@
   "scripts": {
     "build": "vite build",
     "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
+    "build:storybook": "storybook build",
     "build:types": "tsc",
-    "build-storybook": "storybook build",
     "lint": "eslint --fix",
     "prepare": "husky && husky install",
     "prettier": "prettier . --write",

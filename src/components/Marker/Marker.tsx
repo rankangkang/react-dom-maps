@@ -1,11 +1,7 @@
-import { isNumber, omit } from 'lodash'
-import React, { FC, PropsWithChildren, ReactNode, memo, useMemo } from 'react'
+import { isNumber } from 'lodash'
+import React, { ReactNode, useMemo } from 'react'
 
-import {
-  OverlayViewDraggable,
-  OverlayViewOrigin,
-  OverlayViewOriginOffset,
-} from '../OverlayView/types'
+import { OverlayViewOrigin, OverlayViewOriginOffset } from '../OverlayView/types'
 import { OverlayView } from '../OverlayView'
 import { LatLng } from '../../types'
 
