@@ -29,7 +29,7 @@ jobs:
           pnpm i
       - name: build-static
         run: |
-          pnpm build:storybook
+          pnpm storybook:build
 
       - name: deploy with gh-pages
         env:
