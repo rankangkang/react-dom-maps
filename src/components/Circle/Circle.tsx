@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { GMAdapter, LatLng } from '../../types'
+import { LatLng } from '../../types'
 import { useGoogleMapContext } from '../../context'
 import { getLatLngLiteral } from '../../utils/helper'
 
@@ -18,7 +18,7 @@ export interface CircleProps {
   onDragEnd?: (e: google.maps.MapMouseEvent, meta: CircleDragMeta) => void
 }
 
-export const Circle: GMAdapter<CircleProps> = (props) => {
+export const Circle = (props: CircleProps) => {
   const { center, radius, options: circleOptions } = props
   const { map, maps } = useGoogleMapContext()
   const [circle, setCircle] = useState<google.maps.Circle | null>(null)

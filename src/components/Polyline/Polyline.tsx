@@ -1,15 +1,15 @@
 import { noop } from 'lodash'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
 import { getLatLngLiteral } from '../../utils/helper'
-import { GMAdapter, LatLng } from '../../types'
+import { LatLng } from '../../types'
 
 export interface PolylineProps {
+  /** polyline path */
+  path?: LatLng[]
+  /** google map polyline option */
   options?: Omit<google.maps.PolylineOptions, 'map'>
-  path?:
-    | google.maps.MVCArray<google.maps.LatLng>
-    | (google.maps.LatLng | google.maps.LatLngLiteral)[]
 
   onMouseOut?: (e: google.maps.MapMouseEvent) => void
   onMouseOver?: (e: google.maps.MapMouseEvent) => void
@@ -21,7 +21,7 @@ export interface PolylineProps {
   onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
 }
 
-export const Polyline: GMAdapter<PolylineProps> = (props) => {
+export const Polyline = (props: PolylineProps) => {
   const { options: polylineOptions, path } = props
   const { map } = useGoogleMapContext()
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null)

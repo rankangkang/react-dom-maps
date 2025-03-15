@@ -1,21 +1,27 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { GMAdapter, LatLng } from '../../types'
+import { LatLng } from '../../types'
 import { getLatLngLiteral } from '../../utils/helper'
 
 export interface PolygonProps {
+  /** polygon coordinates */
   paths?: LatLng[]
+  /** google map polygon options */
   options?: Omit<google.maps.PolygonOptions, 'map'>
+  /** click event callback */
   onClick?: (e: google.maps.MapMouseEvent) => void
+  /** change event callback, will be fired when polygon paths changed */
   onChange?: (e: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => void
-
+  /** dragstart event callback */
   onDragStart?: (e: google.maps.MapMouseEvent) => void
+  /** drag event callback */
   onDrag?: (e: google.maps.MapMouseEvent) => void
+  /** dragend event callback */
   onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
 }
 
-export const Polygon: GMAdapter<PolygonProps> = (props) => {
+export const Polygon = (props: PolygonProps) => {
   const { paths, options: polygonOptions } = props
   const { map, maps } = useGoogleMapContext()
 

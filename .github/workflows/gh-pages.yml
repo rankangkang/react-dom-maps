@@ -1,0 +1,41 @@
+name: deploy storybook static to gh-pages
+
+on:
+  push:
+    branches:
+      - main
+      - feature-storybook
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          cache: 'pnpm'
+
+      - name: install
+        run: |
+          pnpm i
+      - name: build-static
+        run: |
+          pnpm storybook:build
+
+      - name: deploy with gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAGES }}
+          STATIC_PATH: storybook-static
+          BRANCH: gh-pages
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d ${STATIC_PATH} -b ${BRANCH} -u "github-actions-bot <support+actions@github.com>"

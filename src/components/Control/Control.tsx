@@ -1,9 +1,8 @@
 import { isFunction } from 'lodash'
-import { PropsWithChildren, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import { useGoogleMapContext } from '../../context'
-import { GMAdapter } from '../../types'
 
 export interface ControlProps {
   id: string
@@ -11,9 +10,10 @@ export interface ControlProps {
     | google.maps.ControlPosition
     | ((maps: typeof google.maps) => google.maps.ControlPosition)
   className?: string
+  children?: ReactNode
 }
 
-export const Control: GMAdapter<PropsWithChildren<ControlProps>> = (props) => {
+export const Control = (props: ControlProps) => {
   const { id, position, className = '', children } = props
   const { map, maps } = useGoogleMapContext()
   const divRef = useRef<HTMLDivElement>(document.createElement('div'))

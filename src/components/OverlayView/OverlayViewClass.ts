@@ -5,21 +5,16 @@ import { getLatLngLiteral } from '../../utils/helper'
 import { OverlayViewDraggable, OverlayViewOrigin, OverlayViewOriginOffset } from './types'
 
 export type CreateOverlayViewOptions = {
-  draggable?: OverlayViewDraggable
-  pane?: PaneType
+  draggable: OverlayViewDraggable
+  pane: PaneType
   position?: LatLng
-  origin?: OverlayViewOrigin
-  originOffset?: OverlayViewOriginOffset
+  origin: OverlayViewOrigin
+  originOffset: OverlayViewOriginOffset
+  container: HTMLDivElement
 }
 
 export interface OverlayViewClass extends google.maps.OverlayView {
   getElement(): HTMLDivElement
-
-  /**
-   * 更新位置，不传递 position 时，回到原点，并重新绘制
-   * @param position
-   */
-  setOptions(options: CreateOverlayViewOptions): void
 }
 
 /**
@@ -38,18 +33,18 @@ export function createOverlayViewClass(maps: typeof google.maps = google.maps) {
 
     #origin: OverlayViewOrigin
     #originOffset: OverlayViewOriginOffset
+    // position 可以为 0，为 0 时，渲染到屏幕中央
     #position?: LatLng
     // 是否已被移除
     #isRemoved = false
 
-    constructor(option: CreateOverlayViewOptions = {}) {
+    constructor(option: CreateOverlayViewOptions) {
       super()
       this.#position = option.position
-      this.#pane = option.pane ?? 'overlayMouseTarget'
-      this.#origin = option.origin ?? 'center'
-      this.#originOffset = option.originOffset ?? [0, 0]
-      this.container = createContainerDiv({ classList: [this.#pane] })
-
+      this.#pane = option.pane
+      this.#origin = option.origin
+      this.#originOffset = option.originOffset
+      this.container = option.container
       this.#draggable = Object.assign({}, option.draggable, { prevPxPos: null })
     }
 
@@ -69,31 +64,6 @@ export function createOverlayViewClass(maps: typeof google.maps = google.maps) {
       return this.container
     }
 
-    /**
-     * 更新位置
-     * @param position
-     */
-    setOptions(options: CreateOverlayViewOptions) {
-      this.onRemove()
-      if (options.position) {
-        this.#position = options.position
-      }
-      if (options.origin) {
-        this.#origin = options.origin
-      }
-      if (options.originOffset) {
-        this.#originOffset = options.originOffset
-      }
-      if (options.draggable) {
-        this.#draggable = Object.assign(this.#draggable, options.draggable)
-      }
-      if (options.pane) {
-        this.#pane = options.pane
-      }
-      this.onAdd()
-      this.draw()
-    }
-
     setMapDraggable(draggable: boolean) {
       this.getMap()?.set('draggable', draggable)
     }
@@ -103,6 +73,7 @@ export function createOverlayViewClass(maps: typeof google.maps = google.maps) {
       if (!projection) {
         return
       }
+
       const point = projection.fromLatLngToDivPixel(this.wrappedPosition)
       if (!point) {
         return
