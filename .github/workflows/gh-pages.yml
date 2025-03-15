@@ -1,0 +1,46 @@
+name: gh-pages
+
+on:
+  push:
+    branches:
+      - main
+      - feature-storybook
+
+jobs:
+  build:
+    name: Build and publish storybook
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: install
+        run: |
+          pnpm i
+      - name: build-static
+        run: |
+          pnpm build:storybook
+
+      - name: deploy
+        env:
+          GH_REF: github.com/rankangkang/react-dom-mount.git
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global user.name "rankangkang"
+          git config --global user.email "rankangkang@foxmail.com"
+          git clone https://${GH_REF} .deploy_git
+          cd .deploy_git
+          git checkout gh-pages
+          cd ../
+          mv .deploy_git/.git/ ./storybook-static
+          cd ./storybook-static
+          git add .
+          git commit -m ":construction_worker:CI built at `date +"%Y-%m-%d %H:%M:%S"`"
+          git push --force --quiet "https://${ACCESS_TOKEN}@${GH_REF}" gh-pages:gh-pages
