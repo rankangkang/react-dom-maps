@@ -1,99 +1,128 @@
 import { noop } from 'lodash'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { getLatLngLiteral } from '../../utils/helper'
-import { LatLng } from '../../types'
+import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
+import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 
-export interface PolylineProps {
+export type MapPolylineEventHandler = MapsEventHandler<[google.maps.Polyline]>
+
+export interface PolylineProps extends Omit<google.maps.PolylineOptions, 'map'> {
   /** polyline path */
   path?: LatLng[]
-  /** google map polyline option */
-  options?: Omit<google.maps.PolylineOptions, 'map'>
+  clickable?: boolean
+  draggable?: boolean
+  editable?: boolean
+  geodesic?: boolean
+  visible?: boolean
+  zIndex?: number | null
 
-  onMouseOut?: (e: google.maps.MapMouseEvent) => void
-  onMouseOver?: (e: google.maps.MapMouseEvent) => void
+  onMouseOut?: MapPolylineEventHandler
+  onMouseOver?: MapPolylineEventHandler
+  onMouseUp?: MapPolylineEventHandler
+  onMouseDown?: MapPolylineEventHandler
+  onMouseMove?: MapPolylineEventHandler
 
-  onClick?: (e: google.maps.MapMouseEvent) => void
-  onChange?: (e: google.maps.MapMouseEvent, nextPath?: LatLng[]) => void
-  onDragStart?: (e: google.maps.MapMouseEvent) => void
-  onDrag?: (e: google.maps.MapMouseEvent) => void
-  onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
+  onClick?: MapPolylineEventHandler
+  onRightClick?: MapPolylineEventHandler
+  onDblClick?: MapPolylineEventHandler
+  // onChange?: MapPolylineEventHandler
+
+  onDragStart?: MapPolylineEventHandler
+  onDrag?: MapPolylineEventHandler
+  onDragEnd?: MapPolylineEventHandler
 }
 
 export const Polyline = (props: PolylineProps) => {
-  const { options: polylineOptions, path } = props
-  const { map } = useGoogleMapContext()
-  const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null)
+  const {
+    path,
+    clickable = true,
+    draggable = false,
+    editable = false,
+    geodesic,
+    icons,
+    strokeColor,
+    strokeOpacity,
+    strokeWeight,
+    visible = true,
+    zIndex,
 
+    // onChange,
+    onClick,
+    onDblClick,
+    onRightClick,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+    onMouseDown,
+    onMouseUp,
+    onMouseOver,
+    onMouseMove,
+    onMouseOut,
+  } = props
+  const { map, maps } = useGoogleMapContext()
+  const instance = useMemo(() => new maps.Polyline(), [maps])
+
+  // map
   useEffect(() => {
-    const polyline = new google.maps.Polyline({ map })
-    setPolyline(polyline)
-    return () => {
-      polyline.setMap(null)
-    }
+    instance.setMap(map)
+    return () => instance.setMap(null)
   }, [map])
 
-  useEffect(() => {
-    if (!polyline) return
+  // polyline meta
+  useEffect(() => instance.setPath(path ?? []), [instance, path])
+  useEffect(() => instance.setVisible(visible), [instance, visible])
+  useEffect(() => instance.setDraggable(draggable), [instance, draggable])
+  useEffect(() => instance.setEditable(editable), [instance, editable])
 
-    polyline.setOptions({
-      path,
-      ...polylineOptions,
+  // polyline options
+  useEffect(() => {
+    instance.setOptions({
+      clickable,
+      geodesic,
+      icons,
+      strokeColor,
+      strokeOpacity,
+      strokeWeight,
+      zIndex,
     })
-  }, [polylineOptions, path, polyline])
+  }, [clickable, geodesic, icons, strokeColor, strokeOpacity, strokeWeight, zIndex])
 
-  // events
+  // event
+  // click events
   useEffect(() => {
-    if (!polyline) return noop
+    const listeners = attachEvents(instance, {
+      [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
+      [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
+      [MapsEvent.RightClick]: getMapsEventHandler(instance, onRightClick),
+      [MapsEvent.MouseUp]: getMapsEventHandler(instance, onMouseUp),
+      [MapsEvent.MouseDown]: getMapsEventHandler(instance, onMouseDown),
+      [MapsEvent.MouseOver]: getMapsEventHandler(instance, onMouseOver),
+      [MapsEvent.MouseOut]: getMapsEventHandler(instance, onMouseOut),
+      [MapsEvent.MouseMove]: getMapsEventHandler(instance, onMouseMove),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onClick, onRightClick, onDblClick, onMouseUp, onMouseDown, onMouseOver, onMouseOut])
 
-    let listeners: google.maps.MapsEventListener[] = []
+  // drag events
+  useEffect(() => {
+    const listeners = attachEvents(instance, {
+      [MapsEvent.DragStart]: getMapsEventHandler(instance, onDragStart),
+      [MapsEvent.Drag]: getMapsEventHandler(instance, onDrag),
+      [MapsEvent.DragEnd]: getMapsEventHandler(instance, onDragEnd),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onDragStart, onDragEnd, onDrag])
 
-    // mouse over && mouse out for hover
-    if (props?.onMouseOut) {
-      listeners.push(google.maps.event.addListener(polyline, 'mouseout', props.onMouseOut))
-    }
-    if (props?.onMouseOver) {
-      listeners.push(google.maps.event.addListener(polyline, 'mouseover', props.onMouseOver))
-    }
-
-    if (polylineOptions?.clickable && props.onClick) {
-      listeners.push(google.maps.event.addListener(polyline, 'click', props.onClick))
-    }
-    if (polylineOptions?.editable && props.onChange) {
-      const handler = (e: google.maps.MapMouseEvent) => {
-        const nextPath = polyline.getPath().getArray().map(getLatLngLiteral)
-        props.onChange?.(e, nextPath)
-      }
-      listeners.push(
-        // google.maps.event.addListener(polyline.getPath(), "set_at", handler),
-        google.maps.event.addListener(polyline.getPath(), 'insert_at', handler),
-        google.maps.event.addListener(polyline.getPath(), 'remove_at', handler),
-      )
-    }
-    if (polylineOptions?.draggable) {
-      if (props.onDragStart) {
-        listeners.push(google.maps.event.addListener(polyline, 'dragstart', props.onDragStart))
-      }
-      if (props.onDrag) {
-        listeners.push(google.maps.event.addListener(polyline, 'drag', props.onDrag))
-      }
-      if (props.onDragEnd) {
-        listeners.push(
-          google.maps.event.addListener(polyline, 'dragend', (e: google.maps.MapMouseEvent) => {
-            const nextPath = polyline.getPath().getArray().map(getLatLngLiteral)
-            props.onDragEnd?.(e, nextPath)
-          }),
-        )
-      }
-    }
-
-    return () => {
-      listeners.forEach((l) => {
-        google.maps.event.removeListener(l)
-      })
-    }
-  }, [polyline, polylineOptions?.clickable, polylineOptions?.editable, polylineOptions?.draggable])
+  // // path change
+  // FIXME: path_changed event not working
+  // useEffect(() => {
+  //   const listeners = attachEvents(instance.getPath(), {
+  //     [MapsEvent.InsertAt]: getMapsEventHandler(instance, onChange),
+  //     [MapsEvent.RemoveAt]: getMapsEventHandler(instance, onChange),
+  //   })
+  //   return () => detachEvents(listeners)
+  // }, [instance, onChange])
 
   return null
 }

@@ -1,4 +1,4 @@
-import { MapsEvent } from '../types'
+import { MapsEvent, MapsEventHandler } from '../types'
 
 export const getLatLngLiteral = <
   T extends {
@@ -46,4 +46,15 @@ export const detachEvents = (listeners: google.maps.MapsEventListener[]) => {
   listeners.forEach((l) => {
     google.maps.event.removeListener(l)
   })
+}
+
+export function getMapsEventHandler<
+  T extends google.maps.MVCObject,
+  K extends MapsEventHandler<[T]>,
+>(instance: T, handler?: K) {
+  if (!handler) {
+    return undefined
+  }
+
+  return (e: google.maps.MapMouseEvent) => handler(e, instance)
 }

@@ -43,6 +43,18 @@ export enum MapsEvent {
    * circle event
    */
   RadiusChanged = 'radius_changed',
+
+  /** Polyline/Polygon path event */
+  InsertAt = 'insert_at',
+  /** Polyline/Polygon path event */
+  RemoveAt = 'remove_at',
+  /** Polyline/Polygon path event */
+  SetAt = 'set_at',
+
+  // not working
+  PathChanged = 'path_changed',
+  // not working
+  PathsChanged = 'paths_changed',
 }
 
 export type MapsEventHandler<D extends any[] = [], Event = google.maps.MapMouseEvent> = (

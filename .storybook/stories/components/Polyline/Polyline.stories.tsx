@@ -7,6 +7,7 @@ import { Control } from '../../../../src/components/Control'
 import { LatLng } from '../../../../src/types'
 
 import { ExampleContainer } from '../../ExampleContainer'
+import { getLatLngLiteral } from '../../../../src/utils/helper'
 
 const polylineLatLngs = [
   { lat: 22.3193, lng: 114.2115 },
@@ -21,14 +22,15 @@ const meta: Meta<typeof Polyline> = {
   component: Polyline,
   args: {
     path: polylineLatLngs,
-    options: {
-      strokeColor: '#000',
-      strokeOpacity: 0.8,
-      strokeWeight: 5,
-      clickable: false,
-      editable: false,
-      draggable: false,
-    },
+    clickable: true,
+    editable: false,
+    draggable: false,
+    visible: true,
+    zIndex: 0,
+
+    strokeColor: '#000',
+    strokeOpacity: 0.8,
+    strokeWeight: 5,
   },
   argTypes: {},
   decorators: (Story) => {
@@ -52,25 +54,30 @@ export const SimplePolyline: Story = {
 
 export const DraggablePolyline: Story = {
   args: {
-    options: {
-      strokeWeight: 8,
-      draggable: true,
-    },
+    strokeWeight: 8,
+    draggable: true,
+    // editable: true,
   },
   render(args) {
-    const [paths, setPaths] = useState<LatLng[]>(args.path || [])
+    const [path, setPath] = useState<LatLng[]>(args.path || [])
     const [isDragging, setIsDragging] = useState<boolean>(false)
 
     const onDragStart = useCallback(() => {
       setIsDragging(true)
     }, [])
 
-    const onDragEnd = useCallback((_: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => {
-      setIsDragging(false)
-      if (nextPaths) {
-        setPaths(nextPaths)
-      }
-    }, [])
+    const onDragEnd = useCallback(
+      (_: google.maps.MapMouseEvent, instance: google.maps.Polyline) => {
+        setIsDragging(false)
+        setPath(instance.getPath().getArray())
+      },
+      [],
+    )
+
+    // const onChange = useCallback((_: google.maps.MapMouseEvent, instance: google.maps.Polyline) => {
+    //   console.log('polyline changed')
+    //   setPath(instance.getPath().getArray())
+    // }, [])
 
     return (
       <>
@@ -79,47 +86,21 @@ export const DraggablePolyline: Story = {
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}
             </p>
-            <p className="text-[#fff] text-[20px]">
-              current path:{' '}
-              {paths.map((item) => {
-                return <p>{`(${item.lat}, ${item.lng})`}</p>
-              })}
-            </p>
+            <p className="text-[#fff] text-[20px]">current path: </p>
+            {path.map((item) => {
+              const { lat, lng } = getLatLngLiteral(item)
+              return <p>{`(${lat}, ${lng})`}</p>
+            })}
           </div>
         </Control>
 
-        <Polyline {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
-      </>
-    )
-  },
-}
-
-export const EditablePolyline: Story = {
-  args: {
-    options: {
-      editable: true,
-    },
-  },
-  render(args) {
-    const [paths, setPaths] = useState<LatLng[]>(args.path || [])
-    const onChange = useCallback((_: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => {
-      if (nextPaths) {
-        setPaths(nextPaths)
-      }
-    }, [])
-    return (
-      <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
-          <div className="ml-[24px]">
-            <p className="text-[#fff] text-[20px]">
-              current path:{' '}
-              {paths.map((item) => {
-                return <p>{`(${item.lat}, ${item.lng})`}</p>
-              })}
-            </p>
-          </div>
-        </Control>
-        <Polyline {...args} onChange={onChange} />
+        <Polyline
+          {...args}
+          path={path}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          // onChange={onChange}
+        />
       </>
     )
   },

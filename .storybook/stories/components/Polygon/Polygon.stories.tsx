@@ -6,6 +6,7 @@ import { LatLng } from '../../../../src/types'
 import { Control } from '../../../../src/components/Control'
 
 import { ExampleContainer } from '../../ExampleContainer'
+import { getLatLngLiteral } from '../../../../src/utils/helper'
 
 const polygonLatLngs = [
   { lat: 22.3, lng: 114.1 },
@@ -19,15 +20,13 @@ const meta: Meta<typeof Polygon> = {
   component: Polygon,
   args: {
     paths: polygonLatLngs,
-    options: {
-      editable: false,
-      draggable: false,
-      clickable: false,
-      strokeColor: '#000',
-      strokeOpacity: 0.5,
-      fillColor: '#000',
-      fillOpacity: 0.5,
-    },
+    editable: false,
+    draggable: false,
+    clickable: true,
+    strokeColor: '#000',
+    strokeOpacity: 0.5,
+    fillColor: '#000',
+    fillOpacity: 0.5,
   },
   decorators: (Story) => {
     return (
@@ -54,9 +53,7 @@ export const SimplePolygon: Story = {
 
 export const DraggablePolygon: Story = {
   args: {
-    options: {
-      draggable: true,
-    },
+    draggable: true,
   },
   render(args) {
     const [paths, setPaths] = useState<LatLng[]>(args.paths || [])
@@ -66,11 +63,9 @@ export const DraggablePolygon: Story = {
       setIsDragging(true)
     }, [])
 
-    const onDragEnd = useCallback((_: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => {
+    const onDragEnd = useCallback((_: google.maps.MapMouseEvent, instance: google.maps.Polygon) => {
       setIsDragging(false)
-      if (nextPaths) {
-        setPaths(nextPaths)
-      }
+      setPaths(instance.getPath().getArray())
     }, [])
 
     return (
@@ -80,46 +75,14 @@ export const DraggablePolygon: Story = {
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}
             </p>
-            <p className="text-[#fff] text-[20px]">
-              current path:{' '}
-              {paths.map((item) => {
-                return <p>{`(${item.lat}, ${item.lng})`}</p>
-              })}
-            </p>
+            <p className="text-[#fff] text-[20px]">current path:</p>
+            {paths.map((item) => {
+              const { lat, lng } = getLatLngLiteral(item)
+              return <p>{`(${lat}, ${lng})`}</p>
+            })}
           </div>
         </Control>
         <Polygon {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
-      </>
-    )
-  },
-}
-
-export const EditablePolygon: Story = {
-  args: {
-    options: {
-      editable: true,
-    },
-  },
-  render(args) {
-    const [paths, setPaths] = useState<LatLng[]>(args.paths || [])
-    const onChange = useCallback((_: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => {
-      if (nextPaths) {
-        setPaths(nextPaths)
-      }
-    }, [])
-    return (
-      <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
-          <div className="ml-[24px]">
-            <p className="text-[#fff] text-[20px]">
-              current path:{' '}
-              {paths.map((item) => {
-                return <p>{`(${item.lat}, ${item.lng})`}</p>
-              })}
-            </p>
-          </div>
-        </Control>
-        <Polygon {...args} onChange={onChange} />
       </>
     )
   },
