@@ -15,7 +15,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "vite build -c vite.lib.config.ts",
     "build:babel": "babel ./src -d ./lib  --extensions \".ts,.tsx\"",
     "build:storybook": "storybook build",
     "build:types": "tsc",
