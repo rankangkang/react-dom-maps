@@ -19,6 +19,6 @@
     "downlevelIteration": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src"],
+  "include": ["src", ".storybook"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

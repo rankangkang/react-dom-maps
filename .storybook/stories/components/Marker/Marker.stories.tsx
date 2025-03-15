@@ -4,17 +4,19 @@ import SuperCluster from 'supercluster'
 import { isEqual } from 'lodash'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
-import { Marker } from '../components/Marker/Marker'
-import { LatLng } from '../types'
-import { Control } from '../components/Control'
-import { createMarker } from '../components/Marker'
-import { useGoogleMap } from '../useGoogleMap'
-import { GoogleMap } from '../GoogleMap'
+import { Marker } from '../../../../src/components/Marker/Marker'
+import { LatLng } from '../../../../src/types'
+import { Control } from '../../../../src/components/Control'
+import { createMarker } from '../../../../src/components/Marker'
+import { useGoogleMap } from '../../../../src/useGoogleMap'
+import { GoogleMap } from '../../../../src/GoogleMap'
 
-import { PinIcon } from './components/Pin'
-import { defaultOptions, ExampleGoogleMap } from './common'
+import { PinIcon } from '../Pin'
+import { defaultOptions, ExampleContainer } from '../../ExampleContainer'
+import { useGoogleMapContext } from '../../../../src/context'
 
 const meta: Meta<typeof Marker> = {
+  title: 'Components/Marker',
   component: Marker,
   args: {
     lat: 22.3193,
@@ -28,6 +30,13 @@ const meta: Meta<typeof Marker> = {
     onDragStart: () => {},
     onDragEnd: () => {},
   },
+  decorators: (Story) => {
+    return (
+      <ExampleContainer>
+        <Story />
+      </ExampleContainer>
+    )
+  },
 }
 
 export default meta
@@ -40,11 +49,9 @@ export const WrappedWithMarker: Story = {
   },
   render(args) {
     return (
-      <ExampleGoogleMap>
-        <Marker {...args}>
-          <div className="w-[20px] h-[20px] rounded-[50%] bg-[#ee0000]"></div>
-        </Marker>
-      </ExampleGoogleMap>
+      <Marker {...args}>
+        <div className="w-[20px] h-[20px] rounded-[50%] bg-[#ee0000]"></div>
+      </Marker>
     )
   },
 }
@@ -52,11 +59,7 @@ export const WrappedWithMarker: Story = {
 export const CreateMarkerHOC: Story = {
   render() {
     const Pin = useMemo(() => createMarker(PinIcon), [])
-    return (
-      <ExampleGoogleMap>
-        <Pin lat={22.3} lng={114.17} origin="bottomCenter" originOffset={[0, 6]} />
-      </ExampleGoogleMap>
-    )
+    return <Pin lat={22.3} lng={114.17} origin="bottomCenter" originOffset={[0, 6]} />
   },
 }
 
@@ -84,7 +87,7 @@ export const DraggableMarker: Story = {
     }, [])
 
     return (
-      <ExampleGoogleMap>
+      <>
         <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
@@ -96,7 +99,7 @@ export const DraggableMarker: Story = {
           </div>
         </Control>
         <Marker {...args} onDragStart={onDragStart} onDrag={onDrag} onDragEnd={onDragEnd} />
-      </ExampleGoogleMap>
+      </>
     )
   },
 }
@@ -123,8 +126,7 @@ const RedDot = createMarker((props: { isCluster?: boolean; pointCount?: number; 
 export const MarkerCluster: Story = {
   args: {},
   render() {
-    const { api, ref } = useGoogleMap(defaultOptions)
-
+    const { map } = useGoogleMapContext()
     const [mapState, setMapState] = useState<{ zoom: number; bounds: number[] }>({
       zoom: 0,
       bounds: [],
@@ -132,18 +134,9 @@ export const MarkerCluster: Story = {
     const lastMapBounds = useRef<number[]>([])
 
     useEffect(() => {
-      if (!api?.map) {
-        return
-      }
-
-      const listener = api.map.addListener('idle', () => {
+      const listener = map.addListener('idle', () => {
         // 检测 bounds 是否移动
         try {
-          if (!api?.map) {
-            return
-          }
-
-          const map = api.map
           const bounds = map.getBounds()
           if (!bounds) {
             return
@@ -169,7 +162,7 @@ export const MarkerCluster: Story = {
       return () => {
         listener.remove()
       }
-    }, [api?.map])
+    }, [map])
 
     const [clusters, setClusters] = useState<
       Array<SuperCluster.PointFeature<SuperCluster.AnyProps>>
@@ -229,17 +222,11 @@ export const MarkerCluster: Story = {
     }, [clusters])
 
     return (
-      <div className="w-full h-[600px]">
-        <GoogleMap className="w-full h-full relative" api={api} containerRef={ref}>
-          {api && (
-            <>
-              {coords2Show.map((item) => (
-                <RedDot {...item} zoom={mapState?.zoom ?? 12} />
-              ))}
-            </>
-          )}
-        </GoogleMap>
-      </div>
+      <>
+        {coords2Show.map((item) => (
+          <RedDot {...item} zoom={mapState?.zoom ?? 12} />
+        ))}
+      </>
     )
   },
 }

@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Polygon } from '../components/Polygon/Polygon'
-import { LatLng } from '../types'
-import { Control } from '../components/Control'
+import { Polygon } from '../../../../src/components/Polygon/Polygon'
+import { LatLng } from '../../../../src/types'
+import { Control } from '../../../../src/components/Control'
 
-import { ExampleGoogleMap } from './common'
+import { ExampleContainer } from '../../ExampleContainer'
 
 const polygonLatLngs = [
   { lat: 22.3, lng: 114.1 },
@@ -15,6 +15,7 @@ const polygonLatLngs = [
 ]
 
 const meta: Meta<typeof Polygon> = {
+  title: 'Components/Polygon',
   component: Polygon,
   args: {
     paths: polygonLatLngs,
@@ -27,13 +28,14 @@ const meta: Meta<typeof Polygon> = {
       fillColor: '#000',
       fillOpacity: 0.5,
     },
-    // onChange: () => {},
-    // onClick: () => {},
-    // onDragStart: () => {},
-    // onDrag: () => {},
-    // onDragEnd: () => {},
   },
-  tags: ['autodocs'],
+  decorators: (Story) => {
+    return (
+      <ExampleContainer>
+        <Story />
+      </ExampleContainer>
+    )
+  },
 }
 
 export default meta
@@ -43,9 +45,9 @@ type Story = StoryObj<typeof Polygon>
 export const SimplePolygon: Story = {
   render(args) {
     return (
-      <ExampleGoogleMap>
+      <ExampleContainer>
         <Polygon {...args} />
-      </ExampleGoogleMap>
+      </ExampleContainer>
     )
   },
 }
@@ -72,7 +74,7 @@ export const DraggablePolygon: Story = {
     }, [])
 
     return (
-      <ExampleGoogleMap>
+      <>
         <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
@@ -87,7 +89,7 @@ export const DraggablePolygon: Story = {
           </div>
         </Control>
         <Polygon {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
-      </ExampleGoogleMap>
+      </>
     )
   },
 }
@@ -106,7 +108,7 @@ export const EditablePolygon: Story = {
       }
     }, [])
     return (
-      <ExampleGoogleMap>
+      <>
         <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
@@ -118,7 +120,7 @@ export const EditablePolygon: Story = {
           </div>
         </Control>
         <Polygon {...args} onChange={onChange} />
-      </ExampleGoogleMap>
+      </>
     )
   },
 }

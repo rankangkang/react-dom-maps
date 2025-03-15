@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Polyline } from '../components/Polyline'
-import { Polygon } from '../components/Polygon'
-import { Control } from '../components/Control'
-import { LatLng } from '../types'
+import { Polyline } from '../../../../src/components/Polyline'
+import { Polygon } from '../../../../src/components/Polygon'
+import { Control } from '../../../../src/components/Control'
+import { LatLng } from '../../../../src/types'
 
-import { ExampleGoogleMap } from './common'
+import { ExampleContainer } from '../../ExampleContainer'
 
 const polylineLatLngs = [
   { lat: 22.3193, lng: 114.2115 },
@@ -17,6 +17,7 @@ const polylineLatLngs = [
 ]
 
 const meta: Meta<typeof Polyline> = {
+  title: 'Components/Polyline',
   component: Polyline,
   args: {
     path: polylineLatLngs,
@@ -28,13 +29,15 @@ const meta: Meta<typeof Polyline> = {
       editable: false,
       draggable: false,
     },
-    // onChange: () => {},
-    // onClick: () => {},
-    // onDragStart: () => {},
-    // onDrag: () => {},
-    // onDragEnd: () => {},
   },
   argTypes: {},
+  decorators: (Story) => {
+    return (
+      <ExampleContainer>
+        <Story />
+      </ExampleContainer>
+    )
+  },
 }
 
 export default meta
@@ -43,11 +46,7 @@ type Story = StoryObj<typeof Polyline>
 
 export const SimplePolyline: Story = {
   render(args) {
-    return (
-      <ExampleGoogleMap>
-        <Polyline {...args} />
-      </ExampleGoogleMap>
-    )
+    return <Polyline {...args} />
   },
 }
 
@@ -74,7 +73,7 @@ export const DraggablePolyline: Story = {
     }, [])
 
     return (
-      <ExampleGoogleMap>
+      <>
         <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
@@ -90,7 +89,7 @@ export const DraggablePolyline: Story = {
         </Control>
 
         <Polyline {...args} onDragStart={onDragStart} onDragEnd={onDragEnd} />
-      </ExampleGoogleMap>
+      </>
     )
   },
 }
@@ -109,7 +108,7 @@ export const EditablePolyline: Story = {
       }
     }, [])
     return (
-      <ExampleGoogleMap>
+      <>
         <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
@@ -121,7 +120,7 @@ export const EditablePolyline: Story = {
           </div>
         </Control>
         <Polyline {...args} onChange={onChange} />
-      </ExampleGoogleMap>
+      </>
     )
   },
 }

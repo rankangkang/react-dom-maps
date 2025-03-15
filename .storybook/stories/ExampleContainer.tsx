@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 
-import { GoogleMap } from '../GoogleMap'
-import { UseGoogleMapOptions, useGoogleMap } from '../useGoogleMap'
+import { GoogleMap } from '../../src/GoogleMap'
+import { UseGoogleMapOptions, useGoogleMap } from '../../src/useGoogleMap'
 
 export const defaultOptions: UseGoogleMapOptions = {
   loader: {
@@ -25,7 +25,7 @@ export const defaultOptions: UseGoogleMapOptions = {
   },
 }
 
-export const ExampleGoogleMap = (props: { children?: ReactNode }) => {
+export const ExampleContainer = (props: { children?: ReactNode }) => {
   const { api, ref } = useGoogleMap(defaultOptions)
   return (
     <div className="w-full h-[600px]">

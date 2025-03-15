@@ -1,110 +1,146 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { LatLng } from '../../types'
+import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 import { useGoogleMapContext } from '../../context'
-import { getLatLngLiteral } from '../../utils/helper'
+import { attachEvents, detachEvents, getLatLngLiteral } from '../../utils/helper'
 
-export type CircleDragMeta = { center: LatLng; radius: number }
+export type MapCircleEventHandler = MapsEventHandler<[google.maps.Circle]>
 
-export interface CircleProps {
-  options?: Omit<google.maps.CircleOptions, 'map'>
-  center?: LatLng
+export interface CircleProps extends Omit<google.maps.CircleOptions, 'map'> {
+  center?: LatLng | null
   radius?: number
+  visible?: boolean
+  draggable?: boolean
+  editable?: boolean
+  clickable?: boolean
 
-  onClick?: (e: google.maps.MapMouseEvent) => void
-  onChange?: (e: google.maps.MapMouseEvent, meta: CircleDragMeta) => void
-  onDragStart?: (e: google.maps.MapMouseEvent) => void
-  onDrag?: (e: google.maps.MapMouseEvent) => void
-  onDragEnd?: (e: google.maps.MapMouseEvent, meta: CircleDragMeta) => void
+  onClick?: MapCircleEventHandler
+  onDblClick?: MapCircleEventHandler
+  onRightClick?: MapCircleEventHandler
+  onChange?: MapCircleEventHandler
+  onDragStart?: MapCircleEventHandler
+  onDrag?: MapCircleEventHandler
+  onDragEnd?: MapCircleEventHandler
+
+  onMouseDown?: MapCircleEventHandler
+  onMouseMove?: MapCircleEventHandler
+  onMouseOut?: MapCircleEventHandler
+  onMouseOver?: MapCircleEventHandler
+  onMouseUp?: MapCircleEventHandler
 }
 
 export const Circle = (props: CircleProps) => {
-  const { center, radius, options: circleOptions } = props
+  const {
+    center = null,
+    radius = 0,
+    clickable = true,
+    draggable = false,
+    editable = false,
+    fillColor,
+    fillOpacity,
+    strokeColor,
+    strokeOpacity,
+    strokePosition,
+    strokeWeight,
+    visible = true,
+    zIndex,
+
+    onChange,
+    onClick,
+    onDblClick,
+    onRightClick,
+
+    onDragStart,
+    onDrag,
+    onDragEnd,
+
+    onMouseDown,
+    onMouseUp,
+    onMouseOver,
+    onMouseMove,
+    onMouseOut,
+  } = props
   const { map, maps } = useGoogleMapContext()
-  const [circle, setCircle] = useState<google.maps.Circle | null>(null)
+  const instance = useMemo(() => new maps.Circle(), [maps])
 
   useEffect(() => {
-    const circle = new maps.Circle({ map })
-    setCircle(circle)
+    instance.setMap(map)
+    return () => instance.setMap(null)
+  }, [instance, map])
 
-    return () => {
-      circle.setMap(null)
-    }
-  }, [map])
+  // circle meta
+  useEffect(() => instance.setVisible(visible), [instance, visible])
+  useEffect(() => instance.setCenter(center), [instance, center])
+  useEffect(() => instance.setRadius(radius), [instance, radius])
+  useEffect(() => instance.setDraggable(draggable), [instance, draggable])
+  useEffect(() => instance.setEditable(editable), [instance, editable])
 
+  // options
   useEffect(() => {
-    if (!circle) {
-      return
-    }
-
-    circle.setOptions({
-      center,
-      radius,
-      ...circleOptions,
+    instance.setOptions({
+      clickable,
+      fillColor,
+      fillOpacity,
+      strokeColor,
+      strokeOpacity,
+      strokePosition,
+      strokeWeight,
+      zIndex,
     })
-  }, [circleOptions, center, radius, circle])
+  }, [
+    instance,
+    clickable,
+    fillColor,
+    fillOpacity,
+    strokeColor,
+    strokeOpacity,
+    strokePosition,
+    strokeWeight,
+    zIndex,
+  ])
 
   // event
+  // click events
   useEffect(() => {
-    if (!circle) {
-      return
-    }
+    const listeners = attachEvents(instance, {
+      [MapsEvent.Click]: getCircleEventHandler(instance, onClick),
+      [MapsEvent.DblClick]: getCircleEventHandler(instance, onDblClick),
+      [MapsEvent.RightClick]: getCircleEventHandler(instance, onRightClick),
+      [MapsEvent.MouseUp]: getCircleEventHandler(instance, onMouseUp),
+      [MapsEvent.MouseDown]: getCircleEventHandler(instance, onMouseDown),
+      [MapsEvent.MouseOver]: getCircleEventHandler(instance, onMouseOver),
+      [MapsEvent.MouseOut]: getCircleEventHandler(instance, onMouseOut),
+      [MapsEvent.MouseMove]: getCircleEventHandler(instance, onMouseMove),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onClick, onRightClick, onDblClick, onMouseUp, onMouseDown, onMouseOver, onMouseOut])
 
-    const listeners: google.maps.MapsEventListener[] = []
-    if (circleOptions?.clickable && props.onClick) {
-      listeners.push(
-        circle.addListener('click', (e: google.maps.MapMouseEvent) => {
-          props.onClick?.(e)
-        }),
-      )
-    }
-    if (circleOptions?.editable && props.onChange) {
-      const handler = (e: google.maps.MapMouseEvent) => {
-        const nextCenter = circle.getCenter()
-        const nextRadius = circle.getRadius()
-        props.onChange?.(e, {
-          center: getLatLngLiteral(nextCenter),
-          radius: nextRadius,
-        })
-      }
-      listeners.push(
-        circle.addListener('center_changed', handler),
-        circle.addListener('radius_changed', handler),
-      )
-    }
-    if (circleOptions?.draggable) {
-      if (props.onDragStart) {
-        listeners.push(
-          circle.addListener('dragstart', (e: google.maps.MapMouseEvent) => {
-            props.onDragStart?.(e)
-          }),
-        )
-      }
-      if (props.onDrag) {
-        listeners.push(
-          circle.addListener('drag', (e: google.maps.MapMouseEvent) => {
-            props.onDrag?.(e)
-          }),
-        )
-      }
-      if (props.onDragEnd) {
-        listeners.push(
-          circle.addListener('dragend', (e: google.maps.MapMouseEvent) => {
-            props.onDragEnd?.(e, {
-              center: getLatLngLiteral(circle.getCenter()),
-              radius: circle.getRadius(),
-            })
-          }),
-        )
-      }
-    }
+  // drag events
+  useEffect(() => {
+    const listeners = attachEvents(instance, {
+      [MapsEvent.DragStart]: getCircleEventHandler(instance, onDragStart),
+      [MapsEvent.Drag]: getCircleEventHandler(instance, onDrag),
+      [MapsEvent.DragEnd]: getCircleEventHandler(instance, onDragEnd),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onDragStart, onDragEnd, onDrag])
 
-    return () => {
-      listeners.forEach((l) => {
-        maps.event.removeListener(l)
-      })
-    }
-  }, [circle, circleOptions?.clickable, circleOptions?.editable, circleOptions?.draggable])
+  // circle change
+  useEffect(() => {
+    const listeners = attachEvents(instance, {
+      [MapsEvent.CenterChanged]: getCircleEventHandler(instance, onChange),
+      [MapsEvent.RadiusChanged]: getCircleEventHandler(instance, onChange),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onChange])
 
   return null
+}
+
+function getCircleEventHandler(instance: google.maps.Circle, handler?: MapCircleEventHandler) {
+  if (!handler) {
+    return undefined
+  }
+
+  return (e: google.maps.MapMouseEvent) => handler(e, instance)
 }

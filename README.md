@@ -50,21 +50,3 @@ function App() {
 ```
 
 > get a api key: <https://www.runoob.com/googleapi/google-maps-api-key.html>
-
-## API
-
-### `useGoogleMap` hook API
-
-### `<GoogleMap />` Component API
-
-### `<Marker />` Component API
-
-### `<Polygon />` Component API
-
-### `<Polyline />` Component API
-
-### `<Circle />` Component API
-
-### `<Overlay />` Component API
-
-### `<OverlayView />` Component API

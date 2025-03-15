@@ -19,3 +19,33 @@ export type Draggable<T = any> = {
   onDragStart?(e: MouseEvent, params: T): void
   onDragEnd?(e: MouseEvent, params: T): void
 }
+
+export enum MapsEvent {
+  Click = 'click',
+  DblClick = 'dblclick',
+  RightClick = 'rightclick',
+
+  Drag = 'drag',
+  DragEnd = 'dragend',
+  DragStart = 'dragstart',
+
+  MouseDown = 'mousedown',
+  MouseMove = 'mousemove',
+  MouseOut = 'mouseout',
+  MouseOver = 'mouseover',
+  MouseUp = 'mouseup',
+
+  /**
+   * circle event
+   */
+  CenterChanged = 'center_changed',
+  /**
+   * circle event
+   */
+  RadiusChanged = 'radius_changed',
+}
+
+export type MapsEventHandler<D extends any[] = [], Event = google.maps.MapMouseEvent> = (
+  e: Event,
+  ...args: D
+) => void
