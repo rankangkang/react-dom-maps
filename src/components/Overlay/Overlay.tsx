@@ -1,56 +1,43 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng } from '../../types'
+import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
+import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 
-export interface OverlayProps {
-  image: string // 图片资源（URI 或 require 路径）
+export type MapOverlayEventHandler = MapsEventHandler<[google.maps.GroundOverlay]>
+
+export interface OverlayProps extends Omit<google.maps.GroundOverlayOptions, 'map'> {
+  image: string
   bounds: [LatLng, LatLng]
-  options?: Omit<google.maps.GroundOverlayOptions, 'map'>
+  opacity?: number
+  clickable?: boolean
 
-  onClick?: (e: google.maps.MapMouseEvent) => void
+  onClick?: MapOverlayEventHandler
+  onDblClick?: MapOverlayEventHandler
 }
 
 export const Overlay = (props: OverlayProps) => {
-  const { bounds, image, options } = props
+  const { bounds, image, clickable = true, opacity = 1, onClick, onDblClick } = props
   const { map, maps } = useGoogleMapContext()
-  const [overlay, setOverlay] = useState<google.maps.GroundOverlay | null>(null)
+  const instance = useMemo(
+    () => new maps.GroundOverlay(image, new maps.LatLngBounds(...bounds), { clickable }),
+    [maps, map, image, bounds, clickable],
+  )
 
   useEffect(() => {
-    const boundsObj = new maps.LatLngBounds(...bounds)
-    const overlay = new maps.GroundOverlay(image, boundsObj, { clickable: options?.clickable, map })
-    setOverlay(overlay)
-    return () => {
-      overlay.setMap(null)
-    }
-  }, [map, image, bounds, options?.clickable])
+    instance.setMap(map)
+    return () => instance.setMap(null)
+  }, [instance, map])
+
+  useEffect(() => instance.setOpacity(opacity), [instance, opacity])
 
   useEffect(() => {
-    if (!overlay) {
-      return
-    }
-
-    overlay.setOpacity(options?.opacity ?? 1)
-  }, [overlay, options])
-
-  useEffect(() => {
-    if (!overlay) {
-      return
-    }
-
-    const listeners: google.maps.MapsEventListener[] = []
-    if (props.onClick) {
-      listeners.push(
-        overlay.addListener('click', (e: google.maps.MapMouseEvent) => {
-          props.onClick?.(e)
-        }),
-      )
-    }
-
-    return () => {
-      listeners.forEach((listener) => listener.remove())
-    }
-  }, [overlay])
+    const listeners = attachEvents(instance, {
+      [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
+      [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onClick, onDblClick])
 
   return null
 }

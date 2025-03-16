@@ -9,6 +9,19 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    options: {
+      options: {
+        storySort: {
+          method: '',
+          order: [
+            'Introduction',
+            'Components',
+            ['GoogleMap', 'Marker', 'Polyline', 'Polygon', 'Circle'],
+          ],
+          locales: '',
+        },
+      },
+    },
   },
   tags: ['autodocs'],
 }

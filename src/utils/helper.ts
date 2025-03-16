@@ -1,3 +1,5 @@
+import { MapsEvent, MapsEventHandler } from '../types'
+
 export const getLatLngLiteral = <
   T extends {
     lat?: number | (() => number)
@@ -14,4 +16,45 @@ export const getLatLngLiteral = <
     lat: Number(typeof lat === 'function' ? lat() : lat),
     lng: Number(typeof lng === 'function' ? lng() : lng),
   }
+}
+
+export const attachEvent = <T extends google.maps.MVCObject>(
+  instance: T,
+  eventName: MapsEvent,
+  handler: Function,
+) => {
+  return google.maps.event.addListener(instance, eventName, handler)
+}
+
+export const attachEvents = <T extends google.maps.MVCObject>(
+  instance: T,
+  eventMap: Partial<Record<MapsEvent, Function | null | undefined>>,
+) => {
+  const listeners = []
+  for (const name in eventMap) {
+    const eventName = name as MapsEvent
+    const eventHandler = eventMap[eventName]
+    if (eventHandler) {
+      listeners.push(attachEvent(instance, eventName, eventHandler))
+    }
+  }
+
+  return listeners
+}
+
+export const detachEvents = (listeners: google.maps.MapsEventListener[]) => {
+  listeners.forEach((l) => {
+    google.maps.event.removeListener(l)
+  })
+}
+
+export function getMapsEventHandler<
+  T extends google.maps.MVCObject,
+  K extends MapsEventHandler<[T]>,
+>(instance: T, handler?: K) {
+  if (!handler) {
+    return undefined
+  }
+
+  return (e: google.maps.MapMouseEvent) => handler(e, instance)
 }

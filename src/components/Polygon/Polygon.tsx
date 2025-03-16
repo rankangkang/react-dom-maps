@@ -1,122 +1,138 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useGoogleMapContext } from '../../context'
-import { LatLng } from '../../types'
-import { getLatLngLiteral } from '../../utils/helper'
+import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
+import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 
-export interface PolygonProps {
-  /** polygon coordinates */
+export type MapPolygonEventHandler = MapsEventHandler<[google.maps.Polygon]>
+
+export interface PolygonProps extends Omit<google.maps.PolygonOptions, 'map'> {
+  _instance?: google.maps.Polygon
   paths?: LatLng[]
-  /** google map polygon options */
-  options?: Omit<google.maps.PolygonOptions, 'map'>
-  /** click event callback */
-  onClick?: (e: google.maps.MapMouseEvent) => void
-  /** change event callback, will be fired when polygon paths changed */
-  onChange?: (e: google.maps.MapMouseEvent, nextPaths?: LatLng[]) => void
-  /** dragstart event callback */
-  onDragStart?: (e: google.maps.MapMouseEvent) => void
-  /** drag event callback */
-  onDrag?: (e: google.maps.MapMouseEvent) => void
-  /** dragend event callback */
-  onDragEnd?: (e: google.maps.MapMouseEvent, paths?: LatLng[]) => void
+  visible?: boolean
+  editable?: boolean
+  draggable?: boolean
+  clickable?: boolean
+
+  onClick?: MapPolygonEventHandler
+  onContextMenu?: MapPolygonEventHandler
+  onDblClick?: MapPolygonEventHandler
+  onDragStart?: MapPolygonEventHandler
+  onDrag?: MapPolygonEventHandler
+  onDragEnd?: MapPolygonEventHandler
+  onMouseOut?: MapPolygonEventHandler
+  onMouseOver?: MapPolygonEventHandler
+  onMouseUp?: MapPolygonEventHandler
+  onMouseDown?: MapPolygonEventHandler
+  onMouseMove?: MapPolygonEventHandler
 }
 
 export const Polygon = (props: PolygonProps) => {
-  const { paths, options: polygonOptions } = props
+  const {
+    _instance,
+    paths,
+    clickable = true,
+    draggable = false,
+    editable = false,
+    fillColor,
+    fillOpacity,
+    geodesic,
+    strokeColor,
+    strokeOpacity,
+    strokePosition,
+    strokeWeight,
+    visible = true,
+    zIndex,
+
+    // onChange,
+    onClick,
+    onDblClick,
+    onContextMenu,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+    onMouseDown,
+    onMouseUp,
+    onMouseOver,
+    onMouseMove,
+    onMouseOut,
+  } = props
   const { map, maps } = useGoogleMapContext()
+  const instance = useMemo(() => _instance || new maps.Polygon(), [maps, _instance])
 
-  const [polygon, setPolygon] = useState<google.maps.Polygon | null>(null)
-
+  // map
   useEffect(() => {
-    const polygon = new maps.Polygon({
-      map,
-    })
-    setPolygon(polygon)
-    return () => {
-      polygon?.setMap(null)
-    }
-  }, [map])
+    instance.setMap(map)
+    return () => instance.setMap(null)
+  }, [instance, map])
 
+  // polyline meta
+  useEffect(() => instance.setPath(paths ?? []), [instance, paths])
+  useEffect(() => instance.setVisible(visible), [instance, visible])
+  useEffect(() => instance.setDraggable(draggable), [instance, draggable])
+  useEffect(() => instance.setEditable(editable), [instance, editable])
+
+  // polyline options
   useEffect(() => {
-    if (!polygon) {
-      return
-    }
-
-    polygon.setOptions({
-      paths,
-      ...polygonOptions,
+    instance.setOptions({
+      clickable,
+      geodesic,
+      fillColor,
+      fillOpacity,
+      strokeColor,
+      strokeOpacity,
+      strokeWeight,
+      strokePosition,
+      zIndex,
     })
-  }, [polygonOptions, paths, polygon])
+  }, [
+    instance,
+    clickable,
+    clickable,
+    geodesic,
+    fillColor,
+    fillOpacity,
+    strokeColor,
+    strokeOpacity,
+    strokeWeight,
+    strokePosition,
+    zIndex,
+  ])
 
   // event
+  // click events
   useEffect(() => {
-    if (!polygon) {
-      return
-    }
+    const listeners = attachEvents(instance, {
+      [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
+      [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
+      [MapsEvent.ContextMenu]: getMapsEventHandler(instance, onContextMenu),
+      [MapsEvent.MouseUp]: getMapsEventHandler(instance, onMouseUp),
+      [MapsEvent.MouseDown]: getMapsEventHandler(instance, onMouseDown),
+      [MapsEvent.MouseOver]: getMapsEventHandler(instance, onMouseOver),
+      [MapsEvent.MouseOut]: getMapsEventHandler(instance, onMouseOut),
+      [MapsEvent.MouseMove]: getMapsEventHandler(instance, onMouseMove),
+    })
+    return () => detachEvents(listeners)
+  }, [
+    instance,
+    onClick,
+    onContextMenu,
+    onDblClick,
+    onMouseUp,
+    onMouseDown,
+    onMouseOver,
+    onMouseOut,
+  ])
 
-    const listeners: google.maps.MapsEventListener[] = []
-    if (polygonOptions?.clickable && props.onClick) {
-      const clickListener = polygon.addListener('click', (e: google.maps.MapMouseEvent) => {
-        props.onClick?.(e)
-      })
-      listeners.push(clickListener)
-    }
-
-    if (polygonOptions?.editable && props.onChange) {
-      const handler = (e: google.maps.MapMouseEvent) => {
-        const nextPaths = polygon
-          .getPath()
-          .getArray()
-          .map((latLng) => ({
-            latitude: latLng.lat(),
-            longitude: latLng.lng(),
-          }))
-          .map(getLatLngLiteral)
-
-        props.onChange?.(e, nextPaths)
-      }
-
-      listeners.push(
-        // polygon.getPath().addListener("set_at", handler),
-        polygon.getPath().addListener('insert_at', handler),
-        polygon.getPath().addListener('remove_at', handler),
-      )
-    }
-
-    if (polygonOptions?.draggable) {
-      if (props.onDragStart) {
-        listeners.push(
-          polygon.addListener('dragstart', (e: google.maps.MapMouseEvent) => {
-            props.onDragStart?.(e)
-          }),
-        )
-      }
-
-      if (props.onDrag) {
-        listeners.push(
-          polygon.addListener('drag', (e: google.maps.MapMouseEvent) => {
-            props.onDrag?.(e)
-          }),
-        )
-      }
-
-      if (props.onDragEnd) {
-        listeners.push(
-          polygon.addListener('dragend', (e: google.maps.MapMouseEvent) => {
-            // 获取更新后的全部路径坐标
-            const paths = polygon?.getPath().getArray().map(getLatLngLiteral)
-            props.onDragEnd?.(e, paths)
-          }),
-        )
-      }
-
-      return () => {
-        listeners.forEach((listener) => {
-          maps.event.removeListener(listener)
-        })
-      }
-    }
-  }, [polygonOptions?.clickable, polygonOptions?.draggable, polygonOptions?.editable, polygon])
+  // drag events
+  useEffect(() => {
+    const listeners = attachEvents(instance, {
+      [MapsEvent.DragStart]: getMapsEventHandler(instance, onDragStart),
+      [MapsEvent.Drag]: getMapsEventHandler(instance, onDrag),
+      [MapsEvent.DragEnd]: getMapsEventHandler(instance, onDragEnd),
+    })
+    return () => detachEvents(listeners)
+  }, [instance, onDragStart, onDragEnd, onDrag])
 
   return null
 }
