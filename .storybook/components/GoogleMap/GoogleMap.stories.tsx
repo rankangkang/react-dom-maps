@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { GoogleMap } from '../../src/GoogleMap'
+import { GoogleMap } from '../../../src/GoogleMap'
 
 import { ExampleContainer } from './ExampleContainer'
 

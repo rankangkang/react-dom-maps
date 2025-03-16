@@ -1,7 +1,7 @@
-import { Overlay } from '../../../../src/components/Overlay/Overlay'
+import { Overlay } from '../../../src'
 
 import type { Meta, StoryObj } from '@storybook/react'
-import { ExampleContainer } from '../../ExampleContainer'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
 import React from 'react'
 
 // Overlay 组件的 Meta 配置

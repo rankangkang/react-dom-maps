@@ -4,14 +4,14 @@ import SuperCluster from 'supercluster'
 import { isEqual } from 'lodash'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
-import { Marker } from '../../../../src/components/Marker/Marker'
-import { LatLng } from '../../../../src/types'
-import { Control, ControlPosition } from '../../../../src/components/Control'
-import { createMarker } from '../../../../src/components/Marker'
+import { Marker } from '../../../src/components/Marker/Marker'
+import { LatLng } from '../../../src/types'
+import { Control, ControlPosition } from '../../../src/components/Control'
+import { createMarker } from '../../../src/components/Marker'
 
 import { PinIcon } from '../Pin'
-import { ExampleContainer } from '../../ExampleContainer'
-import { useMapCtx } from '../../../../src'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
+import { useMapCtx } from '../../../src'
 
 const meta: Meta<typeof Marker> = {
   title: 'Components/Marker',

@@ -1,6 +1,6 @@
-import { Control, ControlPosition } from '../../../../src/components/Control/Control'
+import { Control, ControlPosition } from '../../../src/components/Control/Control'
 import type { Meta, StoryObj } from '@storybook/react'
-import { ExampleContainer } from '../../ExampleContainer'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
 import React from 'react'
 
 const meta = {

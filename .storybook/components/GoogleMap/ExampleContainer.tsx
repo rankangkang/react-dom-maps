@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 
-import { GoogleMap } from '../../src/GoogleMap'
-import { UseGoogleMapOptions, useGoogleMap } from '../../src/useGoogleMap'
+import { GoogleMap } from '../../../src/GoogleMap'
+import { UseGoogleMapOptions, useGoogleMap } from '../../../src/useGoogleMap'
 
 export const defaultOptions: UseGoogleMapOptions = {
   loader: {
