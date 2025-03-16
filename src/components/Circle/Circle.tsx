@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 
 export type MapCircleEventHandler = MapsEventHandler<[google.maps.Circle]>
@@ -62,7 +62,7 @@ export const Circle = (props: CircleProps) => {
     onMouseMove,
     onMouseOut,
   } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const instance = useMemo(() => _instance || new maps.Circle(), [maps, _instance])
 
   useEffect(() => {

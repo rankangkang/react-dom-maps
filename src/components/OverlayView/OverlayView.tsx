@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 import { LatLng, PaneType } from '../../types'
 import { createContainerDiv } from '../../utils/dom'
 
@@ -38,7 +38,7 @@ export const OverlayView = (props: OverlayViewProps) => {
     clickable,
     onClick,
   } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const container = useCreateContainer([pane, className].filter(Boolean).join(' '))
   const OverlayViewClass = getOverlayViewClass(maps)
 

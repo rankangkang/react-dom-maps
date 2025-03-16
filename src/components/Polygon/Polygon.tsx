@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 
@@ -57,7 +57,7 @@ export const Polygon = (props: PolygonProps) => {
     onMouseMove,
     onMouseOut,
   } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const instance = useMemo(() => _instance || new maps.Polygon(), [maps, _instance])
 
   // map

@@ -1,5 +1,6 @@
 export * from './GoogleMap'
 export * from './useGoogleMap'
+export { useMapCtx } from './context'
 
 export * from './components/Control'
 export * from './components/Marker'
