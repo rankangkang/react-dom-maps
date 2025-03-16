@@ -8,6 +8,7 @@ import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 export type MapPolylineEventHandler = MapsEventHandler<[google.maps.Polyline]>
 
 export interface PolylineProps extends Omit<google.maps.PolylineOptions, 'map'> {
+  _instance?: google.maps.Polyline
   /** polyline path */
   path?: LatLng[]
   clickable?: boolean
@@ -24,7 +25,7 @@ export interface PolylineProps extends Omit<google.maps.PolylineOptions, 'map'> 
   onMouseMove?: MapPolylineEventHandler
 
   onClick?: MapPolylineEventHandler
-  onRightClick?: MapPolylineEventHandler
+  onContextMenu?: MapPolylineEventHandler
   onDblClick?: MapPolylineEventHandler
   // onChange?: MapPolylineEventHandler
 
@@ -35,6 +36,7 @@ export interface PolylineProps extends Omit<google.maps.PolylineOptions, 'map'> 
 
 export const Polyline = (props: PolylineProps) => {
   const {
+    _instance,
     path,
     clickable = true,
     draggable = false,
@@ -50,7 +52,7 @@ export const Polyline = (props: PolylineProps) => {
     // onChange,
     onClick,
     onDblClick,
-    onRightClick,
+    onContextMenu,
     onDragStart,
     onDrag,
     onDragEnd,
@@ -61,7 +63,7 @@ export const Polyline = (props: PolylineProps) => {
     onMouseOut,
   } = props
   const { map, maps } = useGoogleMapContext()
-  const instance = useMemo(() => new maps.Polyline(), [maps])
+  const instance = useMemo(() => _instance || new maps.Polyline(), [maps, _instance])
 
   // map
   useEffect(() => {
@@ -94,7 +96,7 @@ export const Polyline = (props: PolylineProps) => {
     const listeners = attachEvents(instance, {
       [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
       [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
-      [MapsEvent.RightClick]: getMapsEventHandler(instance, onRightClick),
+      [MapsEvent.ContextMenu]: getMapsEventHandler(instance, onContextMenu),
       [MapsEvent.MouseUp]: getMapsEventHandler(instance, onMouseUp),
       [MapsEvent.MouseDown]: getMapsEventHandler(instance, onMouseDown),
       [MapsEvent.MouseOver]: getMapsEventHandler(instance, onMouseOver),
@@ -102,7 +104,16 @@ export const Polyline = (props: PolylineProps) => {
       [MapsEvent.MouseMove]: getMapsEventHandler(instance, onMouseMove),
     })
     return () => detachEvents(listeners)
-  }, [instance, onClick, onRightClick, onDblClick, onMouseUp, onMouseDown, onMouseOver, onMouseOut])
+  }, [
+    instance,
+    onClick,
+    onContextMenu,
+    onDblClick,
+    onMouseUp,
+    onMouseDown,
+    onMouseOver,
+    onMouseOut,
+  ])
 
   // drag events
   useEffect(() => {
@@ -113,16 +124,6 @@ export const Polyline = (props: PolylineProps) => {
     })
     return () => detachEvents(listeners)
   }, [instance, onDragStart, onDragEnd, onDrag])
-
-  // // path change
-  // FIXME: path_changed event not working
-  // useEffect(() => {
-  //   const listeners = attachEvents(instance.getPath(), {
-  //     [MapsEvent.InsertAt]: getMapsEventHandler(instance, onChange),
-  //     [MapsEvent.RemoveAt]: getMapsEventHandler(instance, onChange),
-  //   })
-  //   return () => detachEvents(listeners)
-  // }, [instance, onChange])
 
   return null
 }

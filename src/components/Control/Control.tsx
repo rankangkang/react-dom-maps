@@ -4,11 +4,13 @@ import { createPortal } from 'react-dom'
 
 import { useGoogleMapContext } from '../../context'
 
+import { ControlPosition, getControlPosition } from './helper'
+
+export { ControlPosition }
+
 export interface ControlProps {
   id: string
-  position:
-    | google.maps.ControlPosition
-    | ((maps: typeof google.maps) => google.maps.ControlPosition)
+  position: ControlPosition
   className?: string
   children?: ReactNode
 }
@@ -17,9 +19,9 @@ export const Control = (props: ControlProps) => {
   const { id, position, className = '', children } = props
   const { map, maps } = useGoogleMapContext()
   const divRef = useRef<HTMLDivElement>(document.createElement('div'))
-  const finalPosition = isFunction(position) ? position(maps) : position
 
   useEffect(() => {
+    const finalPosition = getControlPosition(position, maps)
     divRef.current.dataset.id = id
     map.controls[finalPosition].push(divRef.current)
 
@@ -30,7 +32,7 @@ export const Control = (props: ControlProps) => {
         }
       })
     }
-  }, [id, finalPosition, map])
+  }, [id, position, map])
 
   useEffect(() => {
     divRef.current.className = className

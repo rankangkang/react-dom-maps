@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Polyline } from '../../../../src/components/Polyline'
 import { Polygon } from '../../../../src/components/Polygon'
-import { Control } from '../../../../src/components/Control'
+import { Control, ControlPosition } from '../../../../src/components/Control'
 import { LatLng } from '../../../../src/types'
 
 import { ExampleContainer } from '../../ExampleContainer'
@@ -74,14 +74,9 @@ export const DraggablePolyline: Story = {
       [],
     )
 
-    // const onChange = useCallback((_: google.maps.MapMouseEvent, instance: google.maps.Polyline) => {
-    //   console.log('polyline changed')
-    //   setPath(instance.getPath().getArray())
-    // }, [])
-
     return (
       <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
+        <Control position={ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}
@@ -94,13 +89,7 @@ export const DraggablePolyline: Story = {
           </div>
         </Control>
 
-        <Polyline
-          {...args}
-          path={path}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          // onChange={onChange}
-        />
+        <Polyline {...args} path={path} onDragStart={onDragStart} onDragEnd={onDragEnd} />
       </>
     )
   },

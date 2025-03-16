@@ -7,6 +7,7 @@ import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/hel
 export type MapCircleEventHandler = MapsEventHandler<[google.maps.Circle]>
 
 export interface CircleProps extends Omit<google.maps.CircleOptions, 'map'> {
+  _instance?: google.maps.Circle
   center?: LatLng | null
   radius?: number
   visible?: boolean
@@ -16,7 +17,7 @@ export interface CircleProps extends Omit<google.maps.CircleOptions, 'map'> {
 
   onClick?: MapCircleEventHandler
   onDblClick?: MapCircleEventHandler
-  onRightClick?: MapCircleEventHandler
+  onContextMenu?: MapCircleEventHandler
   onChange?: MapCircleEventHandler
   onDragStart?: MapCircleEventHandler
   onDrag?: MapCircleEventHandler
@@ -31,6 +32,7 @@ export interface CircleProps extends Omit<google.maps.CircleOptions, 'map'> {
 
 export const Circle = (props: CircleProps) => {
   const {
+    _instance,
     center = null,
     radius = 0,
     clickable = true,
@@ -48,7 +50,7 @@ export const Circle = (props: CircleProps) => {
     onChange,
     onClick,
     onDblClick,
-    onRightClick,
+    onContextMenu,
 
     onDragStart,
     onDrag,
@@ -61,7 +63,7 @@ export const Circle = (props: CircleProps) => {
     onMouseOut,
   } = props
   const { map, maps } = useGoogleMapContext()
-  const instance = useMemo(() => new maps.Circle(), [maps])
+  const instance = useMemo(() => _instance || new maps.Circle(), [maps, _instance])
 
   useEffect(() => {
     instance.setMap(map)
@@ -105,7 +107,7 @@ export const Circle = (props: CircleProps) => {
     const listeners = attachEvents(instance, {
       [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
       [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
-      [MapsEvent.RightClick]: getMapsEventHandler(instance, onRightClick),
+      [MapsEvent.ContextMenu]: getMapsEventHandler(instance, onContextMenu),
       [MapsEvent.MouseUp]: getMapsEventHandler(instance, onMouseUp),
       [MapsEvent.MouseDown]: getMapsEventHandler(instance, onMouseDown),
       [MapsEvent.MouseOver]: getMapsEventHandler(instance, onMouseOver),
@@ -113,7 +115,16 @@ export const Circle = (props: CircleProps) => {
       [MapsEvent.MouseMove]: getMapsEventHandler(instance, onMouseMove),
     })
     return () => detachEvents(listeners)
-  }, [instance, onClick, onRightClick, onDblClick, onMouseUp, onMouseDown, onMouseOver, onMouseOut])
+  }, [
+    instance,
+    onClick,
+    onContextMenu,
+    onDblClick,
+    onMouseUp,
+    onMouseDown,
+    onMouseOver,
+    onMouseOut,
+  ])
 
   // drag events
   useEffect(() => {

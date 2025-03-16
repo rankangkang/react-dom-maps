@@ -49,4 +49,6 @@ function App() {
 }
 ```
 
-> get a api key: <https://www.runoob.com/googleapi/google-maps-api-key.html>
+## Docs
+
+see 👉🏻 <https://rankangkang.github.io/react-dom-maps/>

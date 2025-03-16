@@ -7,6 +7,7 @@ import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/hel
 export type MapPolygonEventHandler = MapsEventHandler<[google.maps.Polygon]>
 
 export interface PolygonProps extends Omit<google.maps.PolygonOptions, 'map'> {
+  _instance?: google.maps.Polygon
   paths?: LatLng[]
   visible?: boolean
   editable?: boolean
@@ -14,9 +15,8 @@ export interface PolygonProps extends Omit<google.maps.PolygonOptions, 'map'> {
   clickable?: boolean
 
   onClick?: MapPolygonEventHandler
-  onRightClick?: MapPolygonEventHandler
+  onContextMenu?: MapPolygonEventHandler
   onDblClick?: MapPolygonEventHandler
-  // onChange?: MapPolygonEventHandler
   onDragStart?: MapPolygonEventHandler
   onDrag?: MapPolygonEventHandler
   onDragEnd?: MapPolygonEventHandler
@@ -29,6 +29,7 @@ export interface PolygonProps extends Omit<google.maps.PolygonOptions, 'map'> {
 
 export const Polygon = (props: PolygonProps) => {
   const {
+    _instance,
     paths,
     clickable = true,
     draggable = false,
@@ -46,7 +47,7 @@ export const Polygon = (props: PolygonProps) => {
     // onChange,
     onClick,
     onDblClick,
-    onRightClick,
+    onContextMenu,
     onDragStart,
     onDrag,
     onDragEnd,
@@ -57,7 +58,7 @@ export const Polygon = (props: PolygonProps) => {
     onMouseOut,
   } = props
   const { map, maps } = useGoogleMapContext()
-  const instance = useMemo(() => new maps.Polygon(), [maps])
+  const instance = useMemo(() => _instance || new maps.Polygon(), [maps, _instance])
 
   // map
   useEffect(() => {
@@ -104,7 +105,7 @@ export const Polygon = (props: PolygonProps) => {
     const listeners = attachEvents(instance, {
       [MapsEvent.Click]: getMapsEventHandler(instance, onClick),
       [MapsEvent.DblClick]: getMapsEventHandler(instance, onDblClick),
-      [MapsEvent.RightClick]: getMapsEventHandler(instance, onRightClick),
+      [MapsEvent.ContextMenu]: getMapsEventHandler(instance, onContextMenu),
       [MapsEvent.MouseUp]: getMapsEventHandler(instance, onMouseUp),
       [MapsEvent.MouseDown]: getMapsEventHandler(instance, onMouseDown),
       [MapsEvent.MouseOver]: getMapsEventHandler(instance, onMouseOver),
@@ -112,7 +113,16 @@ export const Polygon = (props: PolygonProps) => {
       [MapsEvent.MouseMove]: getMapsEventHandler(instance, onMouseMove),
     })
     return () => detachEvents(listeners)
-  }, [instance, onClick, onRightClick, onDblClick, onMouseUp, onMouseDown, onMouseOver, onMouseOut])
+  }, [
+    instance,
+    onClick,
+    onContextMenu,
+    onDblClick,
+    onMouseUp,
+    onMouseDown,
+    onMouseOver,
+    onMouseOut,
+  ])
 
   // drag events
   useEffect(() => {
@@ -123,16 +133,6 @@ export const Polygon = (props: PolygonProps) => {
     })
     return () => detachEvents(listeners)
   }, [instance, onDragStart, onDragEnd, onDrag])
-
-  // path change
-  // FIXME: path_changed event is not working
-  // useEffect(() => {
-  //   const listeners = attachEvents(instance, {
-  //     [MapsEvent.PathChanged]: getMapsEventHandler(instance, onChange),
-  //     [MapsEvent.PathsChanged]: getMapsEventHandler(instance, onChange),
-  //   })
-  //   return () => detachEvents(listeners)
-  // }, [paths, onChange])
 
   return null
 }

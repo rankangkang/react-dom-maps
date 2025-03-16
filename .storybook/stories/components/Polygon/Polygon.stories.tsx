@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Polygon } from '../../../../src/components/Polygon/Polygon'
 import { LatLng } from '../../../../src/types'
-import { Control } from '../../../../src/components/Control'
+import { Control, ControlPosition } from '../../../../src/components/Control'
 
 import { ExampleContainer } from '../../ExampleContainer'
 import { getLatLngLiteral } from '../../../../src/utils/helper'
@@ -70,7 +70,7 @@ export const DraggablePolygon: Story = {
 
     return (
       <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
+        <Control position={ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}

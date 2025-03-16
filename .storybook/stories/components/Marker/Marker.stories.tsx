@@ -6,10 +6,8 @@ import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { Marker } from '../../../../src/components/Marker/Marker'
 import { LatLng } from '../../../../src/types'
-import { Control } from '../../../../src/components/Control'
+import { Control, ControlPosition } from '../../../../src/components/Control'
 import { createMarker } from '../../../../src/components/Marker'
-import { useGoogleMap } from '../../../../src/useGoogleMap'
-import { GoogleMap } from '../../../../src/GoogleMap'
 
 import { PinIcon } from '../Pin'
 import { defaultOptions, ExampleContainer } from '../../ExampleContainer'
@@ -88,7 +86,7 @@ export const DraggableMarker: Story = {
 
     return (
       <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
+        <Control position={ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}
