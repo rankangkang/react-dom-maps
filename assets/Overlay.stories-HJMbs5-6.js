@@ -1,0 +1,6 @@
+import{r as a,e as o}from"./index-CintVSxK.js";import{E as b}from"./ExampleContainer-B9efYmIJ.js";import{u as M}from"./useGoogleMapContext-e6VUXdr1.js";import{M as d}from"./types-D2AkDWY3.js";import{a as C,g,d as k}from"./helper-Bbmc8aaZ.js";const y=t=>{const{bounds:l,image:c,clickable:p=!0,opacity:m=1,onClick:u,onDblClick:i}=t,{map:n,maps:s}=M(),e=a.useMemo(()=>new s.GroundOverlay(c,new s.LatLngBounds(...l),{clickable:p}),[s,n,c,l,p]);return a.useEffect(()=>(e.setMap(n),()=>e.setMap(null)),[e,n]),a.useEffect(()=>e.setOpacity(m),[e,m]),a.useEffect(()=>{const O=C(e,{[d.Click]:g(e,u),[d.DblClick]:g(e,i)});return()=>k(O)},[e,u,i]),null},S={title:"Components/Overlay",component:y,args:{image:"https://picsum.photos/seed/picsum/200/300",bounds:[{lat:22.3,lng:114.1},{lat:22.4,lng:114.2}],opacity:1,clickable:!0},decorators:t=>o.createElement(b,null,o.createElement(t,null))},r={args:{},render:t=>o.createElement(y,{...t})};var f,E,v;r.parameters={...r.parameters,docs:{...(f=r.parameters)==null?void 0:f.docs,source:{originalSource:`{
+  args: {},
+  render: args => {
+    return <Overlay {...args} />;
+  }
+}`,...(v=(E=r.parameters)==null?void 0:E.docs)==null?void 0:v.source}}};const _=["SimpleOverlay"],G=Object.freeze(Object.defineProperty({__proto__:null,SimpleOverlay:r,__namedExportsOrder:_,default:S},Symbol.toStringTag,{value:"Module"}));export{G as O};

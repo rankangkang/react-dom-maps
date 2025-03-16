@@ -1,0 +1,1 @@
+var r=(o=>(o.Click="click",o.DblClick="dblclick",o.RightClick="rightclick",o.ContextMenu="contextmenu",o.Drag="drag",o.DragEnd="dragend",o.DragStart="dragstart",o.MouseDown="mousedown",o.MouseMove="mousemove",o.MouseOut="mouseout",o.MouseOver="mouseover",o.MouseUp="mouseup",o.CenterChanged="center_changed",o.RadiusChanged="radius_changed",o))(r||{});export{r as M};

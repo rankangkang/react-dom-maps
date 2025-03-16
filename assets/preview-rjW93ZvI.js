@@ -1,0 +1,1 @@
+const o={parameters:{controls:{matchers:{color:/(background|color)$/i,date:/Date$/i}},options:{options:{storySort:{method:"",order:["Introduction","Components",["GoogleMap","Marker","Polyline","Polygon","Circle"]],locales:""}}}},tags:["autodocs"]};export{o as default};

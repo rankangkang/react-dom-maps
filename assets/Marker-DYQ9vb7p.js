@@ -1,4 +1,4 @@
-import{j as r,M as a,A as i,S as c,a as l}from"./index-Bps_at4X.js";import{useMDXComponents as t}from"./index-CIay_dDh.js";import{M as p,a as s}from"./Marker.stories-B0DEgwe-.js";import"./iframe-DQypWfBC.js";import"./index-CintVSxK.js";import"./index-CqdiiMci.js";import"./index-Cf3yyvpF.js";import"./index-CXQShRbs.js";import"./index-DrFu-skq.js";import"./Control-CQ1SsE3N.js";import"./common-CodZrReM.js";import"./helper-DOGBPK0M.js";function o(n){const e={a:"a",code:"code",h1:"h1",h2:"h2",li:"li",ol:"ol",p:"p",pre:"pre",...t(),...n.components};return r.jsxs(r.Fragment,{children:[r.jsx(a,{of:p}),`
+import{j as r,M as a,A as i,S as c,a as l}from"./index-CATU0vjC.js";import{useMDXComponents as t}from"./index-CIay_dDh.js";import{M as p,a as s}from"./Marker.stories-Ds7cinmD.js";import"./iframe-Vkcw8iQM.js";import"./index-CintVSxK.js";import"./index-CqdiiMci.js";import"./index-Cf3yyvpF.js";import"./index-CXQShRbs.js";import"./index-DrFu-skq.js";import"./ExampleContainer-B9efYmIJ.js";import"./useGoogleMapContext-e6VUXdr1.js";import"./helper-Bbmc8aaZ.js";import"./Control-uemoNCNg.js";function o(n){const e={a:"a",code:"code",h1:"h1",h2:"h2",li:"li",ol:"ol",p:"p",pre:"pre",...t(),...n.components};return r.jsxs(r.Fragment,{children:[r.jsx(a,{of:p}),`
 `,r.jsx(e.h1,{id:"marker",children:"Marker"}),`
 `,r.jsxs(e.p,{children:["您可以使用 ",r.jsx(e.code,{children:"<Marker />"})," 组件 API 将您的自定义 Marker 绘制到地图上。"]}),`
 `,r.jsx(i,{}),`
@@ -42,4 +42,4 @@ const RedDot = createMarker((props: { isCluster?: boolean; pointCount?: number; 
 `,r.jsx(e.h2,{id:"marker-cluster",children:"Marker cluster"}),`
 `,r.jsxs(e.p,{children:["可引入 ",r.jsx(e.a,{href:"https://github.com/mapbox/supercluster",rel:"nofollow",children:"supercluster"})," 辅助实现 cluster marker 渲染。"]}),`
 `,r.jsx(c,{of:s}),`
-`,r.jsx(l,{of:s})]})}function S(n={}){const{wrapper:e}={...t(),...n.components};return e?r.jsx(e,{...n,children:r.jsx(o,{...n})}):o(n)}export{S as default};
+`,r.jsx(l,{of:s})]})}function z(n={}){const{wrapper:e}={...t(),...n.components};return e?r.jsx(e,{...n,children:r.jsx(o,{...n})}):o(n)}export{z as default};
