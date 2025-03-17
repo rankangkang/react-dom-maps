@@ -5,15 +5,15 @@ import * as MarkerStories from './Marker.stories'
 
 # Marker
 
-您可以使用 `<Marker />` 组件 API 将您的自定义 Marker 绘制到地图上。
+The `<Marker />` component API allows you to render custom markers on the map.
 
 <ArgTypes />
 
-## Custom marker element
+## Custom Marker Element
 
-渲染 Marker 有两种方式：
+There are two ways to render a marker:
 
-1. 将你的自定义 Element 使用 `<Marker>` 组件包裹
+1. Wrap your custom element with the `<Marker>` component:
 
 ```tsx
 import { Marker, MarkerProps } from 'react-dom-maps'
@@ -27,7 +27,7 @@ const CustomMarker = (props: MarkerProps) => {
 }
 ```
 
-2. 使用 `createMarker` HOC 创建自定义 Marker
+2. Use the `createMarker` HOC to create a custom marker:
 
 ```tsx
 import { createMarker } from 'react-dom-maps'
@@ -50,9 +50,9 @@ const RedDot = createMarker((props: { isCluster?: boolean; pointCount?: number; 
 })
 ```
 
-## Marker cluster
+## Marker Clustering
 
-可引入 [supercluster](https://github.com/mapbox/supercluster) 辅助实现 cluster marker 渲染。
+To render cluster markers, you can use [supercluster](https://github.com/mapbox/supercluster) for assistance.
 
 <Story of={MarkerStories.MarkerCluster} />
 

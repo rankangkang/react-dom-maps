@@ -3,17 +3,15 @@ import { Example } from '../components/GoogleMap/GoogleMap.stories'
 
 # useGoogleMap
 
-`<GoogleMap />` 组件未集成 google map api 导入的功能，这意味着您需要自行加载 google map api。
+The `<GoogleMap />` component does not include functionality to load the Google Maps API. This means you need to handle the API loading yourself.
 
-为此，您可使用导出的 `useGoogleMap` hook 加载 google map api，该 hook 基于 [`@googlemaps/js-api-loader`](https://www.npmjs.com/package/@googlemaps/js-api-loader) 实现.
+To achieve this, you can use the exported `useGoogleMap` hook, which is built on top of [`@googlemaps/js-api-loader`](https://www.npmjs.com/package/@googlemaps/js-api-loader).
 
 <Source of={Example} />
 
-注意您需要保证传入配置的引用稳定，否则可能会出现多余的 api 加载与重复渲染。为此您可：
+Please ensure that the configuration object you pass has a stable reference. Otherwise, unnecessary API loads and re-renders may occur. To avoid this, you can:
 
-- 将配置提升为全局变量
-- 将配置使用 `useMemo` 等缓存方法包裹
+- Promote the configuration to a global variable.
+- Wrap the configuration using caching methods like `useMemo`.
 
----
-
-当然，您也可以使用自己的脚本加载 google map api。在 google map api 加载完成后，将所需的 `map` 实例以及 `google.maps` 对象传入 `<GoogleMap />` 组件即可。
+Alternatively, you can load the Google Maps API using your own script. Once the API is loaded, simply pass the required `map` instance and the `google.maps` object to the `<GoogleMap />` component.

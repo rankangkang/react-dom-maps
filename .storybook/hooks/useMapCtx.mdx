@@ -3,7 +3,7 @@ import { Example } from '../components/GoogleMap/GoogleMap.stories'
 
 # useMapCtx
 
-使用 `useMapCtx` 可以获取 google map api 上下文，但仅限在被 `<GoogleMap />` 组件包裹的子组件中使用。
+The `useMapCtx` hook allows you to access the Google Maps API context, but it can only be used within components wrapped by the `<GoogleMap />` component.
 
 ```tsx
 import { GoogleMap, useGoogleMap, useMapCtx } from 'react-dom-maps'
@@ -27,7 +27,7 @@ function A() {
 }
 
 function B() {
-  // ❌ B is out of `<GoogleMap />`, cannot use `useMapCtx`
+  // ❌ B is outside of `<GoogleMap />` and cannot use `useMapCtx`
   const { map, maps } = useMapCtx()
   return <div />
 }
