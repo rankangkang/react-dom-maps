@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react'
 import './tailwind.css'
+import { themes } from '@storybook/theming'
 
 const preview: Preview = {
   parameters: {
@@ -17,6 +18,9 @@ const preview: Preview = {
           locales: '',
         },
       },
+    },
+    docs: {
+      theme: themes.normal,
     },
   },
   tags: ['autodocs'],
