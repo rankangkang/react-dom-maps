@@ -1,6 +1,6 @@
-import{j as e,e as a}from"./index-DuVQrEQ4.js";import{useMDXComponents as r}from"./index-CIay_dDh.js";import"./preview-CRn5bSmY.js";import"./DocsRenderer-CFRXHY34-BpkHW0G6.js";import"./iframe-CYLb-P_C.js";import"./index-CintVSxK.js";import"./index-BMBcyzG5.js";import"./index-CqdiiMci.js";import"./index-Cf3yyvpF.js";import"./index-CXQShRbs.js";import"./index-DrFu-skq.js";import"./react-18-xMj-Mug-.js";const{definePreview:h}=__STORYBOOK_MODULE_PREVIEW_API__,p=`# react-dom-maps
+import{j as e,e as o}from"./index-QlSisDSG.js";import{useMDXComponents as r}from"./index-CIay_dDh.js";import"./preview-CRP_v-wa.js";import"./DocsRenderer-CFRXHY34-CiYmJu-U.js";import"./iframe-e6kKNdsN.js";import"./index-CintVSxK.js";import"./index-BMBcyzG5.js";import"./index-CqdiiMci.js";import"./index-Cf3yyvpF.js";import"./index-CXQShRbs.js";import"./index-DrFu-skq.js";import"./react-18-xMj-Mug-.js";const{definePreview:h}=__STORYBOOK_MODULE_PREVIEW_API__,i=`# react-dom-maps
 
-A simple Google Maps rendering component for React, inspired by [\`react-native-maps\`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api). The library is named \`react-dom-maps\` to reflect its focus on web-based map rendering.
+A React library for integrating Google Maps with customizable components and markers, inspired by [\`react-native-maps\`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api). The library is named \`react-dom-maps\` to reflect its focus on web-based map rendering.
 
 ## 🚀 Quick Start
 
@@ -55,4 +55,4 @@ function App() {
 ## 📚 Documentation
 
 For detailed documentation, visit 👉🏻 [react-dom-maps Docs](https://rankangkang.github.io/react-dom-maps/)
-`;function o(n){return e.jsx(a,{children:p})}function G(n={}){const{wrapper:t}={...r(),...n.components};return t?e.jsx(t,{...n,children:e.jsx(o,{...n})}):o()}export{G as default};
+`;function a(n){return e.jsx(o,{children:i})}function k(n={}){const{wrapper:t}={...r(),...n.components};return t?e.jsx(t,{...n,children:e.jsx(a,{...n})}):a()}export{k as default};

@@ -1,5 +1,0 @@
-import{j as o,M as s,P as i,A as m}from"./index-DuVQrEQ4.js";import{useMDXComponents as n}from"./index-CIay_dDh.js";import{O as a}from"./Overlay.stories-Dz2UQloE.js";import"./iframe-CYLb-P_C.js";import"./index-CintVSxK.js";import"./index-BMBcyzG5.js";import"./index-CqdiiMci.js";import"./index-Cf3yyvpF.js";import"./index-CXQShRbs.js";import"./index-DrFu-skq.js";import"./useGoogleMap-DzI1fyv9.js";import"./Marker-CLXWYoYS.js";import"./ExampleContainer-CXFv5vZI.js";import"./helper-Bbmc8aaZ.js";import"./types-D2AkDWY3.js";function r(t){const e={code:"code",h1:"h1",p:"p",...n(),...t.components};return o.jsxs(o.Fragment,{children:[o.jsx(s,{of:a}),`
-`,o.jsx(e.h1,{id:"overlay",children:"Overlay"}),`
-`,o.jsxs(e.p,{children:["The ",o.jsx(e.code,{children:"Overlay"})," component is used to render custom images at specific locations on the map, based on the ",o.jsx(e.code,{children:"google.maps.GroundOverlay"})," class."]}),`
-`,o.jsx(i,{}),`
-`,o.jsx(m,{})]})}function D(t={}){const{wrapper:e}={...n(),...t.components};return e?o.jsx(e,{...t,children:o.jsx(r,{...t})}):r(t)}export{D as default};
