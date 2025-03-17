@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Polygon } from '../../../../src/components/Polygon/Polygon'
-import { LatLng } from '../../../../src/types'
-import { Control, ControlPosition } from '../../../../src/components/Control'
-
-import { ExampleContainer } from '../../ExampleContainer'
-import { getLatLngLiteral } from '../../../../src/utils/helper'
+import { Polygon } from '../../../src/components/Polygon/Polygon'
+import { LatLng } from '../../../src/types'
+import { Control, ControlPosition } from '../../../src/components/Control'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
+import { getLatLngLiteral } from '../../../src/utils/helper'
 
 const polygonLatLngs = [
   { lat: 22.3, lng: 114.1 },

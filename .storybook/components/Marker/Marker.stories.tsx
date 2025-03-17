@@ -4,14 +4,14 @@ import SuperCluster from 'supercluster'
 import { isEqual } from 'lodash'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
-import { Marker } from '../../../../src/components/Marker/Marker'
-import { LatLng } from '../../../../src/types'
-import { Control, ControlPosition } from '../../../../src/components/Control'
-import { createMarker } from '../../../../src/components/Marker'
+import { Marker } from '../../../src/components/Marker/Marker'
+import { LatLng } from '../../../src/types'
+import { Control, ControlPosition } from '../../../src/components/Control'
+import { createMarker } from '../../../src/components/Marker'
 
 import { PinIcon } from '../Pin'
-import { defaultOptions, ExampleContainer } from '../../ExampleContainer'
-import { useGoogleMapContext } from '../../../../src/context'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
+import { useMapCtx } from '../../../src'
 
 const meta: Meta<typeof Marker> = {
   title: 'Components/Marker',
@@ -124,7 +124,7 @@ const RedDot = createMarker((props: { isCluster?: boolean; pointCount?: number; 
 export const MarkerCluster: Story = {
   args: {},
   render() {
-    const { map } = useGoogleMapContext()
+    const { map } = useMapCtx()
     const [mapState, setMapState] = useState<{ zoom: number; bounds: number[] }>({
       zoom: 0,
       bounds: [],

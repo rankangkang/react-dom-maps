@@ -1,7 +1,7 @@
 import { noop } from 'lodash'
 import { useEffect, useMemo } from 'react'
 
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 
@@ -62,7 +62,7 @@ export const Polyline = (props: PolylineProps) => {
     onMouseMove,
     onMouseOut,
   } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const instance = useMemo(() => _instance || new maps.Polyline(), [maps, _instance])
 
   // map

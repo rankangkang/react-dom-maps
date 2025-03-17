@@ -1,13 +1,11 @@
 import React, { PropsWithChildren } from 'react'
 
-import { GoogleMapContextState, GoogleMapContext } from './context'
+import { MapContextState, MapContext } from './context'
 
-export const GoogleMapContextProvider: React.FC<PropsWithChildren<GoogleMapContextState>> = (
-  props,
-) => {
+export const Provider: React.FC<PropsWithChildren<MapContextState>> = (props) => {
   return (
-    <GoogleMapContext.Provider value={{ map: props.map, maps: props.maps }}>
+    <MapContext.Provider value={{ map: props.map, maps: props.maps }}>
       {props.children}
-    </GoogleMapContext.Provider>
+    </MapContext.Provider>
   )
 }

@@ -1,0 +1,17 @@
+import { Source } from '@storybook/blocks'
+import { Example } from '../components/GoogleMap/GoogleMap.stories'
+
+# useGoogleMap
+
+The `<GoogleMap />` component does not include functionality to load the Google Maps API. This means you need to handle the API loading yourself.
+
+To achieve this, you can use the exported `useGoogleMap` hook, which is built on top of [`@googlemaps/js-api-loader`](https://www.npmjs.com/package/@googlemaps/js-api-loader).
+
+<Source of={Example} />
+
+Please ensure that the configuration object you pass has a stable reference. Otherwise, unnecessary API loads and re-renders may occur. To avoid this, you can:
+
+- Promote the configuration to a global variable.
+- Wrap the configuration using caching methods like `useMemo`.
+
+Alternatively, you can load the Google Maps API using your own script. Once the API is loaded, simply pass the required `map` instance and the `google.maps` object to the `<GoogleMap />` component.

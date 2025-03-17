@@ -1,3 +1,3 @@
-export * from "./context";
-export * from "./Provider";
-export * from "./useGoogleMapContext";
+export * from './context'
+export * from './Provider'
+export * from './useMapCtx'

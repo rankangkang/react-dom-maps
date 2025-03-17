@@ -1,0 +1,34 @@
+import { Source } from '@storybook/blocks'
+import { Example } from '../components/GoogleMap/GoogleMap.stories'
+
+# useMapCtx
+
+The `useMapCtx` hook allows you to access the Google Maps API context, but it can only be used within components wrapped by the `<GoogleMap />` component.
+
+```tsx
+import { GoogleMap, useGoogleMap, useMapCtx } from 'react-dom-maps'
+
+function App() {
+  const { api, ref } = useGoogleMap(yourOption)
+  return (
+    <div>
+      <GoogleMap api={api} containerRef={ref}>
+        <A />
+      </GoogleMap>
+      <B />
+    </div>
+  )
+}
+
+function A() {
+  // ✅ A is wrapped in `<GoogleMap />`
+  const { map, maps } = useMapCtx()
+  return <div />
+}
+
+function B() {
+  // ❌ B is outside of `<GoogleMap />` and cannot use `useMapCtx`
+  const { map, maps } = useMapCtx()
+  return <div />
+}
+```

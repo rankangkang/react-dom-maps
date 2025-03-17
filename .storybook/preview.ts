@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react'
 import './tailwind.css'
+import { themes } from '@storybook/theming'
 
 const preview: Preview = {
   parameters: {
@@ -13,14 +14,13 @@ const preview: Preview = {
       options: {
         storySort: {
           method: '',
-          order: [
-            'Introduction',
-            'Components',
-            ['GoogleMap', 'Marker', 'Polyline', 'Polygon', 'Circle'],
-          ],
+          order: ['Components', ['GoogleMap', 'Marker', 'Polyline', 'Polygon', 'Circle']],
           locales: '',
         },
       },
+    },
+    docs: {
+      theme: themes.normal,
     },
   },
   tags: ['autodocs'],

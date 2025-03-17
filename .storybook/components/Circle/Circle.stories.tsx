@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Circle } from '../../../../src/components/Circle'
+import { Circle } from '../../../src/components/Circle'
 
-import { ExampleContainer } from '../../ExampleContainer'
-import { Control } from '../../../../src/components/Control'
-import { LatLng } from '../../../../src/types'
-import { getLatLngLiteral } from '../../../../src/utils/helper'
+import { ExampleContainer } from '../GoogleMap/ExampleContainer'
+import { Control, ControlPosition } from '../../../src/components/Control'
+import { LatLng } from '../../../src/types'
+import { getLatLngLiteral } from '../../../src/utils/helper'
 
 const meta: Meta<typeof Circle> = {
   title: 'Components/Circle',
@@ -26,7 +26,6 @@ const meta: Meta<typeof Circle> = {
     fillColor: '#FF0000',
     fillOpacity: 0.35,
   },
-  tags: ['autodocs'],
   decorators: (Story) => {
     return (
       <ExampleContainer>
@@ -81,7 +80,7 @@ export const DraggableAndEditableCircle: Story = {
     const radius = data.radius
     return (
       <>
-        <Control position={() => google.maps.ControlPosition.TOP_LEFT} id="top-left-panel">
+        <Control position={ControlPosition.TOP_LEFT} id="top-left-panel">
           <div className="ml-[24px]">
             <p className="text-[#fff] text-[20px]">
               status: {isDragging ? 'dragging' : 'not dragging'}

@@ -1,17 +1,19 @@
 # react-dom-maps
 
-Simple Google Map render component for React, inspired by [`react-native-maps`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api), so I name it after `react-dom-maps`.
+A simple Google Maps rendering component for React, inspired by [`react-native-maps`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api). The library is named `react-dom-maps` to reflect its focus on web-based map rendering.
 
-## Quick start
+## 🚀 Quick Start
+
+Install the package using your preferred package manager:
 
 ```bash
-npm i react-dom-maps
+npm install react-dom-maps
 
-# or install through pnpm
+# or install using pnpm
 pnpm add react-dom-maps
 ```
 
-Then happy coding!
+Start building your React-based Google Maps application!
 
 ```tsx
 import { useGoogleMap, GoogleMap, createMarker } from 'react-dom-maps'
@@ -26,18 +28,19 @@ const LAT_LNG_HK = {
 }
 
 function App() {
-  const options = useMemo(() => {
-    return {
+  const options = useMemo(
+    () => ({
       loader: {
-        /** ✨ replace it with your own api key */
+        /** ✨ Replace this with your own API key */
         apiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
       },
       map: {
         mapTypeId: 'roadmap',
         center: LAT_LNG_HK,
       },
-    }
-  }, [])
+    }),
+    [],
+  )
 
   const { api, ref } = useGoogleMap(options)
 
@@ -49,6 +52,6 @@ function App() {
 }
 ```
 
-## Docs
+## 📚 Documentation
 
-see 👉🏻 <https://rankangkang.github.io/react-dom-maps/>
+For detailed documentation, visit 👉🏻 [react-dom-maps Docs](https://rankangkang.github.io/react-dom-maps/)

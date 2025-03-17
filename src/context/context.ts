@@ -1,13 +1,13 @@
-import { createContext } from "react";
+import { createContext } from 'react'
 
-export interface GoogleMapContextState {
+export interface MapContextState {
   /** map instance */
-  map?: google.maps.Map;
+  map?: google.maps.Map
   /** google.maps object */
-  maps?: typeof google.maps;
+  maps?: typeof google.maps
 }
 
-export const GoogleMapContext = createContext<GoogleMapContextState>({
+export const MapContext = createContext<MapContextState>({
   map: undefined,
   maps: undefined,
-});
+})

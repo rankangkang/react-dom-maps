@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 import { LatLng, MapsEvent, MapsEventHandler } from '../../types'
 import { attachEvents, detachEvents, getMapsEventHandler } from '../../utils/helper'
 
@@ -18,7 +18,7 @@ export interface OverlayProps extends Omit<google.maps.GroundOverlayOptions, 'ma
 
 export const Overlay = (props: OverlayProps) => {
   const { bounds, image, clickable = true, opacity = 1, onClick, onDblClick } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const instance = useMemo(
     () => new maps.GroundOverlay(image, new maps.LatLngBounds(...bounds), { clickable }),
     [maps, map, image, bounds, clickable],

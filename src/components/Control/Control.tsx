@@ -2,7 +2,7 @@ import { isFunction } from 'lodash'
 import { ReactNode, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
-import { useGoogleMapContext } from '../../context'
+import { useMapCtx } from '../../context'
 
 import { ControlPosition, getControlPosition } from './helper'
 
@@ -17,7 +17,7 @@ export interface ControlProps {
 
 export const Control = (props: ControlProps) => {
   const { id, position, className = '', children } = props
-  const { map, maps } = useGoogleMapContext()
+  const { map, maps } = useMapCtx()
   const divRef = useRef<HTMLDivElement>(document.createElement('div'))
 
   useEffect(() => {
