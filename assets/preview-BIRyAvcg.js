@@ -1,0 +1,1 @@
+import{_ as o}from"./index-BMBcyzG5.js";import"./index-CintVSxK.js";const t={parameters:{controls:{matchers:{color:/(background|color)$/i,date:/Date$/i}},options:{options:{storySort:{method:"",order:["Components",["GoogleMap","Marker","Polyline","Polygon","Circle"]],locales:""}}},docs:{theme:o.normal}},tags:["autodocs"]};export{t as default};
