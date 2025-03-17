@@ -1,6 +1,6 @@
 # react-dom-maps
 
-A simple Google Maps rendering component for React, inspired by [`react-native-maps`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api). The library is named `react-dom-maps` to reflect its focus on web-based map rendering.
+A React library for integrating Google Maps with customizable components and markers, inspired by [`react-native-maps`](https://github.com/react-native-maps/react-native-maps?tab=readme-ov-file#component-api). The library is named `react-dom-maps` to reflect its focus on web-based map rendering.
 
 ## 🚀 Quick Start
 

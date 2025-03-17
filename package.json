@@ -1,10 +1,30 @@
 {
   "name": "react-dom-maps",
   "version": "0.1.0",
-  "description": "",
-  "keywords": [],
-  "license": "ISC",
-  "author": "",
+  "description": "A React library for integrating Google Maps with customizable components and markers.",
+  "keywords": [
+    "google",
+    "map",
+    "google-map",
+    "google map",
+    "marker",
+    "markers",
+    "googlemaps",
+    "react",
+    "reactjs",
+    "react-google-maps",
+    "react-component"
+  ],
+  "homepage": "https://rankangkang.github.io/react-dom-maps/",
+  "bugs": {
+    "url": "https://github.com/rankangkang/react-dom-maps/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rankangkang/react-dom-maps.git"
+  },
+  "license": "MIT",
+  "author": "rankangkang <rankangkang@foxmail.com>",
   "type": "module",
   "exports": {
     "import": "./dist/index.es.js",
