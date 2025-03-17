@@ -1,0 +1,19 @@
+import { Source } from '@storybook/blocks'
+import { Example } from '../components/GoogleMap/GoogleMap.stories'
+
+# useGoogleMap
+
+`<GoogleMap />` 组件未集成 google map api 导入的功能，这意味着您需要自行加载 google map api。
+
+为此，您可使用导出的 `useGoogleMap` hook 加载 google map api，该 hook 基于 [`@googlemaps/js-api-loader`](https://www.npmjs.com/package/@googlemaps/js-api-loader) 实现.
+
+<Source of={Example} />
+
+注意您需要保证传入配置的引用稳定，否则可能会出现多余的 api 加载与重复渲染。为此您可：
+
+- 将配置提升为全局变量
+- 将配置使用 `useMemo` 等缓存方法包裹
+
+---
+
+当然，您也可以使用自己的脚本加载 google map api。在 google map api 加载完成后，将所需的 `map` 实例以及 `google.maps` 对象传入 `<GoogleMap />` 组件即可。

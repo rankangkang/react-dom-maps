@@ -1,0 +1,34 @@
+import { Source } from '@storybook/blocks'
+import { Example } from '../components/GoogleMap/GoogleMap.stories'
+
+# useMapCtx
+
+使用 `useMapCtx` 可以获取 google map api 上下文，但仅限在被 `<GoogleMap />` 组件包裹的子组件中使用。
+
+```tsx
+import { GoogleMap, useGoogleMap, useMapCtx } from 'react-dom-maps'
+
+function App() {
+  const { api, ref } = useGoogleMap(yourOption)
+  return (
+    <div>
+      <GoogleMap api={api} containerRef={ref}>
+        <A />
+      </GoogleMap>
+      <B />
+    </div>
+  )
+}
+
+function A() {
+  // ✅ A is wrapped in `<GoogleMap />`
+  const { map, maps } = useMapCtx()
+  return <div />
+}
+
+function B() {
+  // ❌ B is out of `<GoogleMap />`, cannot use `useMapCtx`
+  const { map, maps } = useMapCtx()
+  return <div />
+}
+```
